@@ -3,7 +3,7 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema.alterTable('films', (table) => {
+  return knex.schema.alterTable('movies', (table) => {
     table.string('imdb_id').unique();
     table.string('title');
     table.string('year');
@@ -24,7 +24,7 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.alterTable('films', (table) => {
+  return knex.schema.alterTable('movies', (table) => {
     table.dropColumn('imdb_id');
     table.dropColumn('title');
     table.dropColumn('rated');

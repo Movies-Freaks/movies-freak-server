@@ -37,6 +37,13 @@ const config = Object.freeze({
   isTestingEnv,
   env: nodeEnv,
   database: { driver: env.DATABASE_DRIVER },
+  imdb: {
+    driver: env.IMDB_DRIVER,
+    omdb: {
+      host: env.OMDB_HOST,
+      apiKey: env.OMDB_API_KEY
+    }
+  },
   server: {
     host: env.HOST,
     port: Number(env.PORT)

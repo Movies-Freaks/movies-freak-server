@@ -14,8 +14,8 @@ export default class MoviesFreakError extends Error {
   constructor(params: ErrorParams = {}) {
     super();
 
-    this.message = params.message;
-    this.info = params.info;
+    this.message = params.message ?? 'Something unexpected happened.';
+    this.info = params.info ?? {};
 
     if (params.error) this.cause = params.error;
   }

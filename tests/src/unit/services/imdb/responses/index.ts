@@ -1,0 +1,1 @@
+export { movieResponse } from './movie';

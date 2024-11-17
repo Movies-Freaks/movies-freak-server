@@ -1,7 +1,7 @@
 export enum DatabaseDriver {
   MEMORY = 'memory',
   SQL = 'sql'
-}
+};
 
 export enum Env {
   CI = 'ci',
@@ -11,8 +11,23 @@ export enum Env {
   TESTING = 'test',
 };
 
+export enum IMDBDriver {
+  OMDB = 'omdb',
+  LOCAL = 'local'
+};
+
 export type DatabaseConfig = {
   driver: DatabaseDriver
+};
+
+export type OMDBConfig = {
+  host: string,
+  apiKey: string
+};
+
+export type IMDBConfig = {
+  driver: IMDBDriver,
+  omdb?: OMDBConfig
 };
 
 export type ServerConfig = {
@@ -24,6 +39,7 @@ export type ServerConfig = {
 export type Config = {
   database: DatabaseConfig,
   env: Env,
+  imdb: IMDBConfig,
   isDevelopEnv: boolean,
   isProductionEnv: boolean,
   isTestingEnv: boolean,

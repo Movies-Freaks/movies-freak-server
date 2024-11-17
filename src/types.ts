@@ -12,7 +12,7 @@ export type UUIDJson<T> = {
   [key: UUID]: T;
 };
 
-export type Class = {
+export type Class = Function | {
   new(...args: any[]): Json,
   prototype: Json
 };
