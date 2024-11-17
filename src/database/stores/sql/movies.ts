@@ -27,8 +27,12 @@ export default class SQLMoviesStore extends AbstractSQLStore<Movie> {
     return this.deserialize(result);
   }
 
-  findById(entityId: UUID): Promise<Movie> {
-    return this.findOne({ id: entityId })
+  findById(movieId: UUID): Promise<Movie> {
+    return this.findOne({ id: movieId })
+  }
+
+  findByIMDBId(imdbId: string): Promise<Movie> {
+    return this.findOne({ imdb_id: imdbId })
   }
 
   protected async find(query: Json): Promise<Movie[]> {

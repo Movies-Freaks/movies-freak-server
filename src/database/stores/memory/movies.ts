@@ -15,4 +15,16 @@ export default class MemoryMoviesStore extends AbstractMemoryStore<Movie> {
       throw error;
     }
   }
+
+  async findByIMDBId(imdbId: string) {
+    try {
+      return await super.findOne({ imdbId });
+    } catch (error: any) {
+      if (error instanceof NotFound) {
+        throw new MovieNotFound({ imdbId });
+      }
+
+      throw error;
+    }
+  }
 }
