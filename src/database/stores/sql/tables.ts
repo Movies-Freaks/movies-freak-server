@@ -1,3 +1,4 @@
 export enum SQLTables {
-  MOVIES = 'movies'
+  MOVIES = 'movies',
+  WATCH_HUBS = 'watch_hubs'
 };

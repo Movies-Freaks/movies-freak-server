@@ -1,9 +1,10 @@
+import { get, isEmpty } from 'lodash';
+
 import AbstractMemoryStore from './abstractMemoryStore';
 import { Movie } from 'moviesFreak/entities';
 import { MovieNotFound, NotFound } from '../errors';
-import { UUID } from 'types';
-import { get, isEmpty } from 'lodash';
 import { Sort, SortOrder } from '../types';
+import { UUID } from 'types';
 
 export default class MemoryMoviesStore extends AbstractMemoryStore<Movie> {
   async findById(movieId: UUID) {

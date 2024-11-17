@@ -15,35 +15,22 @@ class MoviesStoreTest extends SQLTestCase {
   async setUp() {
     super.setUp();
 
-    this.movies = await Promise.all(
-      moviesFixture.map((movie) => this.database.movies.create(new Movie(movie)))
-    );
+    await this.loadFixtures();
   }
 
-  protected buildMovie() {
-    return new Movie({
-      name: 'The Nun',
-      plot: 'A priest with a haunted past and a novice on the threshold of her final vows are '
-        + 'sent by the Vatican to investigate the death of a young nun in Romania and confront a '
-        + 'malevolent force in the form of a demonic nun.',
-      title: 'The Nun',
-      year: '2018',
-      rated: 'R',
-      runtime: '96 min',
-      director: 'Corin Hardy',
-      poster: 'https://m.media-amazon.com/images/M/MV5BMjM3NzQ5NDcxOF5BMl5BanBnXkFtZTgwNzM4MTQ5NT',
-      production: 'N/A',
-      genre: ['Horror', 'Mystery', 'Thriller'],
-      writers: ['Gary Dauberman', 'James Wan'],
-      actors: ['Demián Bichir', 'Taissa Farmiga', 'Jonas Bloquet'],
-      imdbId: 'tt5814060',
-      imdbRating: '5.3/10'
+  private async loadFixtures() {
+    const promises = moviesFixture.map((movieData) => {
+      const movie = new Movie(movieData);
+
+      return this.database.movies.create(movie);
     });
+
+    this.movies = await Promise.all(promises);
   }
 }
 
 export class CreateMovieTest extends MoviesStoreTest {
-  private movieToCreate: Movie;
+  protected movieToCreate: Movie;
 
   async setUp() {
     await super.setUp();
@@ -114,10 +101,31 @@ export class CreateMovieTest extends MoviesStoreTest {
       this.database.movies.create(this.buildMovie())
     ).willBeRejectedWith(SQLDatabaseException);
   }
+
+  protected buildMovie() {
+    return new Movie({
+      name: 'The Nun',
+      plot: 'A priest with a haunted past and a novice on the threshold of her final vows are '
+        + 'sent by the Vatican to investigate the death of a young nun in Romania and confront a '
+        + 'malevolent force in the form of a demonic nun.',
+      title: 'The Nun',
+      year: '2018',
+      rated: 'R',
+      runtime: '96 min',
+      director: 'Corin Hardy',
+      poster: 'https://m.media-amazon.com/images/M/MV5BMjM3NzQ5NDcxOF5BMl5BanBnXkFtZTgwNzM4MTQ5NT',
+      production: 'N/A',
+      genre: ['Horror', 'Mystery', 'Thriller'],
+      writers: ['Gary Dauberman', 'James Wan'],
+      actors: ['Demián Bichir', 'Taissa Farmiga', 'Jonas Bloquet'],
+      imdbId: 'tt5814060',
+      imdbRating: '5.3/10'
+    });
+  }
 }
 
 export class FindByIdTest extends MoviesStoreTest {
-  private movieId: UUID;
+  protected movieId: UUID;
 
   async setUp() {
     await super.setUp();

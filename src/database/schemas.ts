@@ -1,6 +1,18 @@
 import { UUID } from 'types';
 
-export type MovieSchema = {
+export enum WatchHubPrivacy {
+  PUBLIC = 'public',
+  PRIVATE = 'private',
+  SHARED = 'shared'
+};
+
+type StoreSchema = {
+  id?: UUID,
+  createdAt?: Date,
+  updatedAt?: Date
+}
+
+export type MovieSchema = StoreSchema & {
   name: string,
   plot: string,
   title: string,
@@ -15,7 +27,11 @@ export type MovieSchema = {
   actors: string[],
   imdbId: string,
   imdbRating: string,
-  id?: UUID,
-  createdAt?: Date,
-  updatedAt?: Date
 };
+
+export type WatchHubSchema = StoreSchema & {
+  name: string,
+  privacy: WatchHubPrivacy,
+  description: string,
+  totalMovies?: number,
+}

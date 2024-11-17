@@ -69,6 +69,12 @@ class TestRunner {
     console.info(`Tests passed: ${this.totalPassed}`.green);
     console.info(`Tests failed: ${this.totalFailed}`.yellow);
     console.error(`Error on tests: ${this.totalErrors}`.red);
+
+    if (this.totalFailed > 0 || this.totalErrors > 0) {
+      process.exit(1);
+    } else {
+      process.exit(0);
+    }
   }
 
   private async runTest(Test: any, testModule: string) {

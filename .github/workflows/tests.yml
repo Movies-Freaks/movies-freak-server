@@ -1,0 +1,42 @@
+name: Run Tests
+
+on: [pull_request]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: ci
+
+    services:
+      postgres:
+        image: postgres:13.3-alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: movies_freak_test
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v2
+
+    - name: Use Node 20.10.0
+      uses: actions/setup-node@v1
+      with:
+        node-version: '20.10.0'
+
+    - name: set config
+      run: mkdir .env && cp sample.env .env/ci.env
+
+    - name: install dependencies
+      run: yarn install
+
+    - name: migrate
+      run: yarn migrate:ci
+
+    - name: test
+      run: yarn test:ci

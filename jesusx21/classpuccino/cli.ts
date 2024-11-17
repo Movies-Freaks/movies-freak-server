@@ -6,11 +6,6 @@ import TestRunner from './testsRunner';
 const directoryPath = path.join('../../', process.argv[2]);
 const testRunner = new TestRunner(directoryPath);
 
-const resolve = () => {
-  console.log('Done!');
-  process.exit(0);
-};
-
 const reject = (error: any) => {
   console.info('Error runing tests');
   console.error('Error:', error);
@@ -18,5 +13,4 @@ const reject = (error: any) => {
 };
 
 testRunner.run()
-  .then(resolve)
   .catch(reject);

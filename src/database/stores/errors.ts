@@ -32,3 +32,4 @@ export class NotFound extends DatabaseError {
 }
 
 export class MovieNotFound extends NotFound {}
+export class WatchHubNotFound extends NotFound {}

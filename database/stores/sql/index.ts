@@ -6,7 +6,6 @@ import SQLTVEpisodeStore from './tvEpisodes';
 import SQLTVSeasonStore from './tvSeason';
 import SQLTVSeriesStore from './tvSeries';
 import SQLUsersStore from './users';
-import SQLWatchlistsStore from './watchlists';
 
 class SQLDatabase {
   readonly connection: any;
@@ -16,7 +15,6 @@ class SQLDatabase {
   readonly tvSeasons: SQLTVSeasonStore;
   readonly tvSeries: SQLTVSeriesStore;
   readonly users: SQLUsersStore;
-  readonly watchlists: SQLWatchlistsStore;
 
   constructor(connection: Knex) {
     this.connection = connection;
@@ -27,7 +25,6 @@ class SQLDatabase {
     this.tvSeasons = new SQLTVSeasonStore(this.connection);
     this.tvSeries = new SQLTVSeriesStore(this.connection);
     this.users = new SQLUsersStore(this.connection);
-    this.watchlists = new SQLWatchlistsStore(this.connection);
   }
 
   async withTransaction(fn: Function, ...args: any[]) {

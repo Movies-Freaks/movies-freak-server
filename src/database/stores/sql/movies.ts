@@ -1,12 +1,13 @@
+import { isEmpty, snakeCase } from 'lodash';
+
 import AbstractSQLStore from './abstractSQLStore'
 import { Json, UUID } from 'types';
 import { Movie } from 'moviesFreak/entities';
 import { MovieNotFound, IMDBIdAlreadyExists } from '../errors';
 import { MovieSerializer } from './serializers';
+import { Sort, SortOrder } from '../types';
 import { SQLDatabaseException } from './errors';
 import { SQLTables } from './tables';
-import { Sort, SortOrder } from '../types';
-import { isEmpty, snakeCase } from 'lodash';
 
 export default class SQLMoviesStore extends AbstractSQLStore<Movie> {
   async create(movie: Movie): Promise<Movie> {
@@ -18,7 +19,7 @@ export default class SQLMoviesStore extends AbstractSQLStore<Movie> {
       [result] = await this.connection(SQLTables.MOVIES)
         .returning('*')
         .insert(dataToInsert);
-    } catch (error: any) {
+    } catch (error) {
       if (error.constraint === 'movies_imdb_id_unique') {
         throw new IMDBIdAlreadyExists(movie.imdbId);
       }
@@ -49,7 +50,7 @@ export default class SQLMoviesStore extends AbstractSQLStore<Movie> {
         .offset(skip)
         .limit(limit)
         .orderBy(this.serializeSort(sort));
-    } catch (error: any) {
+    } catch (error) {
       throw new SQLDatabaseException(error);
     }
 
@@ -66,7 +67,7 @@ export default class SQLMoviesStore extends AbstractSQLStore<Movie> {
       items = await this.connection(SQLTables.MOVIES)
         .where(query)
         .orderBy('created_at');
-    } catch (error: any) {
+    } catch (error) {
       throw new SQLDatabaseException(error);
     }
 
@@ -80,13 +81,11 @@ export default class SQLMoviesStore extends AbstractSQLStore<Movie> {
       result = await this.connection(SQLTables.MOVIES)
         .where(query)
         .first();
-    } catch (error: any) {
+    } catch (error) {
       throw new SQLDatabaseException(error);
     }
 
-    if (!result) {
-      throw new MovieNotFound(query);
-    }
+    if (!result) throw new MovieNotFound(query);
 
     return this.deserialize(result);
   }
