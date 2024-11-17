@@ -177,7 +177,7 @@ export class FindAllTest extends MoviesStoreTest {
 
     this.assertThat(movies).hasLengthOf(2);
     this.assertThat(totalItems).isEqual(5);
-    this.assertThat(movies[0].name).isEqual('Annabelle');
+    this.assertThat(movies[0].name).isEqual('It Chapter Two');
     this.assertThat(movies[1].name).isEqual('The Conjuring');
   }
 

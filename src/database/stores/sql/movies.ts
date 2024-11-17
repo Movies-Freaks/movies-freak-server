@@ -39,7 +39,7 @@ export default class SQLMoviesStore extends AbstractSQLStore<Movie> {
 
   async findAll(limit: number, skip: number, sort?: Sort) {
     if (isEmpty(sort)) {
-      sort = { createdAt: SortOrder.DESC }
+      sort = { createdAt: SortOrder.ASC }
     }
 
     let items: Json[];

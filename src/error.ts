@@ -7,6 +7,7 @@ export type ErrorParams = {
 };
 
 export default class MoviesFreakError extends Error {
+  name: string;
   message: string;
   cause?: Json;
   info?: Json;
@@ -14,13 +15,10 @@ export default class MoviesFreakError extends Error {
   constructor(params: ErrorParams = {}) {
     super();
 
+    this.name = this.constructor.name;
     this.message = params.message ?? 'Something unexpected happened.';
     this.info = params.info ?? {};
 
     if (params.error) this.cause = params.error;
-  }
-
-  get name() {
-    return this.constructor.name;
   }
 }

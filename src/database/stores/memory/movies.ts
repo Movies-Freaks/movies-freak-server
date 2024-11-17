@@ -32,7 +32,7 @@ export default class MemoryMoviesStore extends AbstractMemoryStore<Movie> {
 
   async findAll(limit: number, skip: number, sort?: Sort) {
     if (isEmpty(sort)) {
-      sort = { createdAt: SortOrder.DESC }
+      sort = { createdAt: SortOrder.ASC }
     }
 
     const items = this.all();

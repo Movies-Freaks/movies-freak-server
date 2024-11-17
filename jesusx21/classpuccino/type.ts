@@ -1,4 +1,6 @@
-import { Json } from '../../types/common';
+export type Json = {
+  [key: string]: any
+};
 
 export type ClasspuccinoErrorParams = {
   error?: Error;
