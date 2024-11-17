@@ -1,6 +1,5 @@
 import { Knex } from 'knex';
 
-import SQLFilmsStore from './films';
 import SQLMediaWatchlistsStore from './mediaWatchlist';
 import SQLSessionsStore from './sessions';
 import SQLTVEpisodeStore from './tvEpisodes';
@@ -11,7 +10,6 @@ import SQLWatchlistsStore from './watchlists';
 
 class SQLDatabase {
   readonly connection: any;
-  readonly films: SQLFilmsStore;
   readonly mediaWatchlists: SQLMediaWatchlistsStore;
   readonly sessions: SQLSessionsStore;
   readonly tvEpisodes: SQLTVEpisodeStore;
@@ -23,7 +21,6 @@ class SQLDatabase {
   constructor(connection: Knex) {
     this.connection = connection;
 
-    this.films = new SQLFilmsStore(this.connection);
     this.mediaWatchlists = new SQLMediaWatchlistsStore(this.connection, this);
     this.sessions = new SQLSessionsStore(this.connection, this);
     this.tvEpisodes = new SQLTVEpisodeStore(this.connection);

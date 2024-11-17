@@ -64,4 +64,8 @@ export default abstract class AbstractMemoryStore<T> extends AbstractStore<T> {
 
     return entity;
   }
+
+  protected all() {
+    return Object.values(this.items);
+  }
 }

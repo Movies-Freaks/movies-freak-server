@@ -1,4 +1,3 @@
-import InMemoryFilmsStore from './films';
 import InMemorySessionsStore from './session';
 import InMemoryTVEpisodesStore from './tvEpisodes';
 import InMemoryTVSeasonStore from './tvSeasons';
@@ -7,7 +6,6 @@ import InMemoryUsersStore from './users';
 import InMemoryWatchlistStore from './watchlists';
 
 class InMemoryDatabase {
-  readonly films: InMemoryFilmsStore;
   readonly sessions: InMemorySessionsStore;
   readonly tvEpisodes: InMemoryTVEpisodesStore;
   readonly tvSeasons: InMemoryTVSeasonStore;
@@ -16,7 +14,6 @@ class InMemoryDatabase {
   readonly watchlists: InMemoryWatchlistStore;
 
   constructor() {
-    this.films = new InMemoryFilmsStore();
     this.sessions = new InMemorySessionsStore();
     this.tvEpisodes = new InMemoryTVEpisodesStore();
     this.tvSeasons = new InMemoryTVSeasonStore();
