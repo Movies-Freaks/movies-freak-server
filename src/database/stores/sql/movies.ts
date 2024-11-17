@@ -1,4 +1,4 @@
-import { isEmpty, snakeCase } from 'lodash';
+import { isEmpty } from 'lodash';
 
 import AbstractSQLStore from './abstractSQLStore'
 import { Json, UUID } from 'types';
@@ -60,6 +60,18 @@ export default class SQLMoviesStore extends AbstractSQLStore<Movie> {
     };
   }
 
+  async count() {
+    try {
+      const result = await this.connection(SQLTables.MOVIES)
+        .count()
+        .first();
+
+      return Number(result.count ?? 0);
+    } catch (error: any) {
+      throw new SQLDatabaseException(error);
+    }
+  }
+
   protected async find(query: Json): Promise<Movie[]> {
     let items: Json[];
 
@@ -96,27 +108,5 @@ export default class SQLMoviesStore extends AbstractSQLStore<Movie> {
 
   protected serialize(entity: Movie): Json {
     return MovieSerializer.toJson(entity);
-  }
-
-  async count() {
-    try {
-      const result = await this.connection(SQLTables.MOVIES)
-        .count()
-        .first();
-
-      return Number(result.count ?? 0);
-    } catch (error: any) {
-      throw new SQLDatabaseException(error);
-    }
-  }
-
-  private serializeSort(sort: Sort) {
-    return Object.keys(sort)
-      .map((field) => {
-        return {
-          column: snakeCase(field),
-          order: sort[field]
-        };
-      });
   }
 }
