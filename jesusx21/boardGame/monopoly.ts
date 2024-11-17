@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { Json } from '../types/common';
 import { TitleNotFound, TokenNotUsed } from './errors';
-import { Request, Response, SingleResponse } from './types';
+import { Request, Response, Json } from './types';
 
 class Monopoly {
   private titles: Json;
@@ -10,7 +9,7 @@ class Monopoly {
     this.titles = {};
   }
 
-  async onPost(_request: Request): Promise<SingleResponse> {
+  async onPost(_request: Request): Promise<Response> {
     throw new TokenNotUsed();
   }
 
@@ -18,11 +17,11 @@ class Monopoly {
     throw new TokenNotUsed();
   }
 
-  async onPut(_request: Request): Promise<SingleResponse> {
+  async onPut(_request: Request): Promise<Response> {
     throw new TokenNotUsed();
   }
 
-  async onDelete(_request: Request): Promise<SingleResponse> {
+  async onDelete(_request: Request): Promise<Response> {
     throw new TokenNotUsed();
   }
 
@@ -31,6 +30,13 @@ class Monopoly {
    */
   setTitle(titleName: string, titleValue: object) {
     this.titles[titleName] = titleValue;
+  }
+
+  /**
+   * See titles as a dependency, so what setTitle does is to set a dependency to boardgame
+   */
+  setTitles(titles: Json) {
+    Object.assign(this.titles, { ...titles });
   }
 
   /**

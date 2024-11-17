@@ -1,15 +1,15 @@
-import { BoardGameErrorParams } from './types';
+import { BoardGameErrorParams, Json } from './types';
 
 export class BoardGameError extends Error {
   readonly cause?: Error;
-  readonly info?: {};
+  readonly info?: Json;
 
-  constructor(args: BoardGameErrorParams = {}) {
-    super(args.message || 'Something unexpected happened');
+  constructor(params: BoardGameErrorParams = {}) {
+    super(params.message || 'Something unexpected happened');
 
-    this.name = args.name || this.constructor.name;
-    this.cause = args.error;
-    this.info = args.info || {};
+    this.name = this.constructor.name;
+    this.cause = params.error;
+    this.info = params.info ?? {};
   }
 }
 
@@ -26,14 +26,19 @@ export class TokenNotUsed extends MonopolyError {
 }
 
 export class TitleNotFound extends MonopolyError {
-  titleName: string;
-
   constructor(titleName: string) {
     super({
       message: `Monopoly title "${titleName}" was not found`,
       info: { titleName }
     });
+  }
+}
 
-    this.titleName = titleName;
+export class TokenNotSupported extends MonopolyError {
+  constructor(tokenName: string) {
+    super({
+      message: `Monopoly token "${tokenName}" is not supported`,
+      info: { tokenName }
+    });
   }
 }

@@ -1,5 +1,5 @@
 {
-  "watch": ["api", "app", "database", "typescript"],
+  "watch": ["api", "app", "database", "typescript", "src"],
   "ext": ".ts,.js",
-  "exec": "ts-node index.ts"
+  "exec": "ts-node src/index.ts"
 }
