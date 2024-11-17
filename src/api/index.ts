@@ -1,8 +1,9 @@
-import { Database } from 'database';
 import BoardGame from 'jesusx21/boardGame';
-import MoviesFreakAPI from './v1/resources';
-import { IMDB } from 'services/imdb/types';
+
 import config from 'config';
+import MoviesFreakAPI from './v1/resources';
+import { Database } from 'database';
+import { IMDB } from 'services/imdb/types';
 
 export default class MoviesFreakApp extends BoardGame {
   constructor(host: string, port: number) {
@@ -12,23 +13,19 @@ export default class MoviesFreakApp extends BoardGame {
   initialize(database: Database, imdb: IMDB) {
     this.dependencies = { database, imdb };
 
-    this.addJsonMiddleware()
-      .addCORSMiddleware()
-      .setLogger()
+    this.addCORSMiddleware()
       .setHeaders({
         'X-Frame-Options': 'SAMEORIGIN',
         'X-XSS-Protection': '1; mode=block',
         'X-Content-Type-Options': 'nosniff',
         'Content-Security-Policy': 'nosniff'
       })
+      .setLogger()
       .buildAPI()
       .buildEndpoints();
 
-    if (!this.isTestingEnv()) {
-      const format = this.isProductionEnv() ? 'combined' : 'dev';
-
-      this.addRequestLogger(format);
-    }
+    const format = this.isProductionEnv() ? 'combined' : 'dev';
+    this.addRequestLogger(format);
 
     this.setUnexpectedErrorHandler();
     this.disablePoweredBy();

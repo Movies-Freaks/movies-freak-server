@@ -49,6 +49,12 @@ export class HTTPError extends BoardGameError {
   }
 }
 
+export class HTTPBadInput extends HTTPError {
+  constructor(code: string = ErrorCodes.BAD_REQUEST, cause?: Error) {
+    super(HTTPStatusCode.BAD_REQUEST, code, cause);
+  }
+}
+
 export class HTTPNotFound extends HTTPError {
   constructor(code: string = ErrorCodes.NOT_FOUND, cause?: Error) {
     super(HTTPStatusCode.NOT_FOUND, code, cause);

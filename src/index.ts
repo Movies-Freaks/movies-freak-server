@@ -10,3 +10,5 @@ const app = new MoviesFreakApp(config.server.host, config.server.port);
 
 app.initialize(database, imdb)
   .start();
+
+ // TODO: VALIDATE ENV FILE EXISTENCE

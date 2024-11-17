@@ -12,7 +12,7 @@ class SandboxNotInitialized extends Error {
     return 'SandboxNotInitialized';
   }
 }
-
+ // TODO: VALIDATE ENV FILE EXISTENCE
 export default class TestCase extends ClasspuccinoTestCase {
   private sandbox?: sinon.SinonSandbox;
 

@@ -23,7 +23,6 @@ class SQLWatchlistsStore {
         .returning('*')
         .insert(dataToInsert);
     } catch (error: any) {
-      console.log(error)
       throw new SQLDatabaseException(error);
     }
 

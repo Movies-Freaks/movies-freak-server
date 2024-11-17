@@ -42,7 +42,6 @@ export default function validateFixture<T>(initialSchema: Json | Json[], fixture
   const validationResults = validate(instance, schema, options);
 
   if (!isEmpty(validationResults.errors)) {
-    console.log(validationResults.errors)
     throw new SchemaValidationFails(validationResults);
   }
 

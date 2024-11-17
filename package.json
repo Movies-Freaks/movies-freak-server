@@ -7,7 +7,8 @@
     "build": "webpack --mode=production --node-env=production",
     "lint": "eslint .",
     "test:ci": "NODE_ENV=ci yarn ts-node jesusx21/classpuccino/cli tests/src",
-    "test": "NODE_ENV=test yarn ts-node jesusx21/classpuccino/cli tests/src",
+    "test:all": "NODE_ENV=test yarn ts-node jesusx21/classpuccino/cli tests/src",
+    "test": "NODE_ENV=test yarn ts-node jesusx21/classpuccino/cli ",
     "migrate:make": "knex migrate:make $1",
     "migrate:testing": "knex migrate:latest --env test",
     "migrate:ci": "knex migrate:latest --env ci",
@@ -16,6 +17,7 @@
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
+    "start:dev": "NODE_ENV=develop nodemon",
     "serve": "webpack serve"
   },
   "repository": "git@github.com:jesusx21/movies-freak-server.git",

@@ -1,11 +1,15 @@
-export default class MoviesFreakAPI {
-  // private app: any;
+import MoviesResource from './movies';
 
-  constructor(_app: any) {
-  //   this.app = app;
+export default class MoviesFreakAPI {
+  private app: any;
+
+  constructor(app: any) {
+    this.app = app;
   }
 
   buildAPI() {
-    // add resources here
+    const moviesResource = new MoviesResource();
+
+    this.app.registerResource('movies', moviesResource);
   }
 }

@@ -18,7 +18,7 @@ switch (env.NODE_ENV) {
   case 'staging':
     nodeEnv = Env.STAGING;
     break;
-  case 'testing':
+  case 'test':
     nodeEnv = Env.TESTING;
     break;
   default:

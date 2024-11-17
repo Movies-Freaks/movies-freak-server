@@ -69,11 +69,16 @@ export default abstract class BoardGame {
     this.logger = loggers.logger;
     this.expressLogger = loggers.expressLogger;
 
+    this.app.use(express.json());
     this.app.use(express.static(`${os.tmpdir()}`));
     this.app.use(this.endpointBase, this.router);
   }
 
-  registerResource(resourcePath: string, resourceInstance: Monopoly, middlewares: Middleware[]) {
+  registerResource(
+    resourcePath: string,
+    resourceInstance: Monopoly,
+    middlewares: Middleware[] = []
+  ) {
     const [resource, path = ''] = resourcePath.split('/');
 
     if (!this.endpoints[resource]) {
@@ -99,12 +104,6 @@ export default abstract class BoardGame {
   protected abstract isProductionEnv(): boolean;
   protected abstract isTestingEnv(): boolean;
   protected abstract setEndpointBase(): this;
-
-  protected addJsonMiddleware() {
-    this.app.use(express.json());
-
-    return this;
-  }
 
   protected disablePoweredBy() {
     this.app.disable('x-powered-by');

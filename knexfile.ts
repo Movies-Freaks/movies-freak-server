@@ -29,7 +29,8 @@ const knexConfig: knexConfig = {
     client: 'postgres',
     connection: {
       database: 'movies_freak_dev',
-      user: 'postgres'
+      user: 'postgres',
+      password: 'postgres'
     }
   },
   staging: {
