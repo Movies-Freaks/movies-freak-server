@@ -2,7 +2,6 @@ import request from 'supertest';
 import { omit } from 'lodash';
 import { ClasspuccinoError } from '../../jesusx21/classpuccino/errors';
 
-import buildTestApp from './testApp';
 import MoviesFreakApp from '../../api/index';
 import TestCase from '../testHelper';
 import { Database } from '../../types/database';
@@ -42,34 +41,6 @@ class APITestCase extends TestCase {
     super();
 
     this.moviesFreakApp = this.buildTestApp(this.getDatabase());
-  }
-
-  buildTestApp(database: Database) {
-    this.moviesFreakApp = buildTestApp(database);
-
-    return this.moviesFreakApp;
-  }
-
-  async simulatePost<T>(params: PostRequestParams): Promise<T> {
-    const {
-      path,
-      authorization,
-      payload = {},
-      statusCode = 201
-    } = params;
-
-    const requestBuilder = request(this.moviesFreakApp.getExpressApp())
-      .post(`/movies-freak/api/v1${path}`)
-
-    if (!!authorization) {
-      requestBuilder.set('Authorization', authorization)
-    }
-
-    const { body } = await requestBuilder
-      .send(payload)
-      .expect(statusCode);
-
-    return body;
   }
 
   async simulateGet<T>(params: GetRequestParams): Promise<T> {

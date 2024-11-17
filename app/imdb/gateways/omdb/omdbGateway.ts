@@ -20,15 +20,6 @@ class OMDBGateway {
     this.apiKey = apiKey;
   }
 
-  fetchFilmById(imdbId: string) {
-    const query: IMDBQueryObject = {
-      type: IMDBType.MOVIE,
-      i: imdbId
-    };
-
-    return this.request<FilmResult>(query, IMDBResultType.FILM);
-  }
-
   fetchTVSerieById(imdbId: string) {
     const query: IMDBQueryObject = {
       type: IMDBType.SERIES,

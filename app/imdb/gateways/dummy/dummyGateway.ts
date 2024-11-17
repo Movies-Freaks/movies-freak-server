@@ -1,14 +1,10 @@
 import {
-  FilmResult,
   TVEpisodeResult,
   TVSeasonResult,
   TVSerieResult
 } from './result';
 
 class DummyIMDBGateway {
-  async fetchFilmById(_imdbI: string) {
-    return new FilmResult();
-  }
 
   async fetchTVSerieById(_imdbId: string) {
     return new TVSerieResult();

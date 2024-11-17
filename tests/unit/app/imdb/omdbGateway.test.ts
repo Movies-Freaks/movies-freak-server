@@ -32,69 +32,6 @@ class OMDBGatewayTest extends TestCase {
   }
 }
 
-
-export class FetchFilmByIdTest extends OMDBGatewayTest {
-  async testRequestFilmByIMDBId() {
-    this.mockClass(axios, 'static')
-      .expects('get')
-      .resolves(IMDB_FILM_RESPONSE);
-
-    const result = await this.gateway.fetchFilmById('tt0111161');
-    const { data } = IMDB_FILM_RESPONSE;
-
-    this.assertThat(result).isInstanceOf(FilmResult);
-    this.assertThat(result.isRequestSuccesful()).isTrue();
-    this.assertThat(result.title).isEqual(data.Title);
-    this.assertThat(result.year).isEqual(data.Year);
-    this.assertThat(result.rated).isEqual(data.Rated);
-    this.assertThat(result.released).isEqual(data.Released);
-    this.assertThat(result.runtime).isEqual(data.Runtime);
-    this.assertThat(result.genre).isEqual(data.Genre.split(','));
-    this.assertThat(result.director).isEqual(data.Director);
-    this.assertThat(result.writers).isEqual(['Stephen King', 'Frank Darabont']);
-    this.assertThat(result.actors).isEqual(
-      ['Tim Robbins', 'Morgan Freeman', 'Bob Gunton']
-    );
-    this.assertThat(result.plot).isEqual(data.Plot);
-    this.assertThat(result.language).isEqual(data.Language);
-    this.assertThat(result.country).isEqual(data.Country);
-    this.assertThat(result.awards).isEqual(data.Awards);
-    this.assertThat(result.poster).isEqual(data.Poster);
-    this.assertThat(result.ratings[0].source).isEqual(data.Ratings[0].Source);
-    this.assertThat(result.ratings[0].value).isEqual(data.Ratings[0].Value);
-    this.assertThat(result.ratings[1].source).isEqual(data.Ratings[1].Source);
-    this.assertThat(result.ratings[1].value).isEqual(data.Ratings[1].Value);
-    this.assertThat(result.ratings[2].source).isEqual(data.Ratings[2].Source);
-    this.assertThat(result.ratings[2].value).isEqual(data.Ratings[2].Value);
-    this.assertThat(result.imdbId).isEqual(data.imdbID);
-    this.assertThat(result.type).isEqual('film');
-    this.assertThat(result.production).isEqual(data.Production);
-  }
-
-  async testThrowErrorOnIncorrectIMDBId() {
-    this.mockClass(axios, 'static')
-      .expects('get')
-      .resolves({ data: { Response: 'False', Error: 'Incorrect IMDb ID.' } });
-
-    await this.assertThat(
-      this.gateway.fetchFilmById('tt0111161')
-    ).willBeRejectedWith(IncorrectIMDBId);
-  }
-
-  async testErrorOnInvalidApiKey() {
-    const data = { Response: 'False', Error: 'Invalid API key!' };
-
-    this.mockClass(axios, 'static')
-      .expects('get')
-      .rejects({ response: { data } });
-
-    await this.assertThat(
-      this.gateway.fetchFilmById('tt011161')
-    ).willBeRejectedWith(InvalidAPIKey);
-  }
-}
-
-
 export class FetchTVSerieByIdTest extends OMDBGatewayTest {
   async testRequestForATVSerieByIMDBId() {
     this.mockClass(axios, 'static')

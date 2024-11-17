@@ -1,15 +1,13 @@
 /* eslint-disable no-param-reassign */
 import sinon from 'sinon';
 import { isEmpty, omit } from 'lodash';
-import { v4 as uuid } from 'uuid';
 
 import buildFixtureGenerator from './fixtures';
-import getDatabase from '../database';
 import {
   TestCase as ClasspuccinoTestCase
 } from 'jesusx21/classpuccino';
 import FixturesGenerator from './fixtures/generator';
-import { Environment, Json, UUID } from '../types/common';
+import { Json } from '../types/common';
 import {
   Film,
   TVSerie,
@@ -26,101 +24,23 @@ import {
   TVSerieEntity,
   WatchlistEntity
 } from '../types/entities';
-import { Database, DatabaseDriver } from '../types/database';
+import { Database } from '../types/database';
 import {
   FilmFixture,
   TVEpisodeFixture,
   TVSerieFixture,
-  UserFixture,
-  WatchlistFixture,
+  UserFixture
 } from './fixtures/types';
 import { FixtureGeneratorRecipe } from './fixtures/generator/types';
 
-class SandboxNotInitialized extends Error {
-  get name() {
-    return 'SandboxNotInitialized';
-  }
-}
 
 class TestCase extends ClasspuccinoTestCase {
   private fixturesGenerator: FixturesGenerator;
-  private sandbox?: sinon.SinonSandbox;
 
   constructor() {
     super();
 
     this.fixturesGenerator = buildFixtureGenerator();
-  }
-
-  setUp() {
-    this.createSandbox();
-  }
-
-  tearDown() {
-    this.restoreSandbox();
-  }
-
-  getDatabase() {
-    return getDatabase(DatabaseDriver.MEMORY, Environment.TEST);
-  }
-
-  createSandbox() {
-    if (this.sandbox) {
-      return this.sandbox;
-    }
-
-    this.sandbox = sinon.createSandbox();
-
-    return this.sandbox;
-  }
-
-  mockClass(klass: any, functionType = 'instance') {
-    if (!this.sandbox) {
-      throw new SandboxNotInitialized();
-    }
-
-    const target = functionType === 'instance' ? klass.prototype : klass;
-
-    return this.sandbox.mock(target);
-  }
-
-  mockDate(year: number, month: number, day: number) {
-    if (!this.sandbox) {
-      throw new SandboxNotInitialized();
-    }
-
-    const date = new Date(year, month - 1, day);
-
-    return this.sandbox.useFakeTimers(date);
-  }
-
-  mockFunction(instance: any, functionName: string) {
-    if (!this.sandbox) {
-      throw new SandboxNotInitialized();
-    }
-
-    return this.sandbox.mock(instance)
-      .expects(functionName);
-  }
-
-  restoreSandbox() {
-    if (!this.sandbox) {
-      return;
-    }
-
-    this.sandbox.restore();
-  }
-
-  stubFunction(instance: any, functionName: string) {
-    if (!this.sandbox) {
-      throw new SandboxNotInitialized();
-    }
-
-    return this.sandbox.stub(instance, functionName);
-  }
-
-  generateUUID(): UUID {
-    return uuid();
   }
 
   async createUser(database: Database, data: Json = {}) {
