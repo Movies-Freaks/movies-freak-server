@@ -1,12 +1,12 @@
-import { fill, isArray, isNil, isUndefined, mergeWith } from 'lodash';
+import { isArray, isNil, isUndefined, mergeWith } from 'lodash';
 
 import replaceFormats from './replaceFormats';
 import validateFixture from './validateFixture';
-import { fixtureGeneratorRecipe, SchemaFaker } from './types';
+import { FixtureGeneratorRecipe, SchemaFaker } from './types';
 import { FixtureSchemaNotSet } from './errors';
 import { Json } from '../../../types/common';
 
-function getRecipes(params: fixtureGeneratorRecipe): Json[] {
+function getRecipes(params: FixtureGeneratorRecipe): Json[] {
   const {
     quantity = 0,
     recipe = []
@@ -47,7 +47,7 @@ async function generateSingleFixture<T>(schemaFaker: SchemaFaker, schema: Json, 
 export default function generateFixtures<T>(
   schemaFaker: SchemaFaker,
   schemas: Json,
-  params: fixtureGeneratorRecipe
+  params: FixtureGeneratorRecipe
 ) {
   const { type } = params;
   const schema = schemas[type];
@@ -61,4 +61,3 @@ export default function generateFixtures<T>(
       .map((recipe) => generateSingleFixture<T>(schemaFaker, schema, recipe))
   );
 }
-

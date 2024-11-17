@@ -8,7 +8,7 @@ export type schemaFakerParams = {
   failOnInvalidTypes?: boolean
 }
 
-export type fixtureGeneratorRecipe = {
+export type FixtureGeneratorRecipe = {
   type: string,
   recipe?: Json[],
   quantity?: number

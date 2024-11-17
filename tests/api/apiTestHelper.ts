@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { omit } from 'lodash';
-import { ClasspuccinoError } from '../../classpuccino/errors';
+import { ClasspuccinoError } from '../../jesusx21/classpuccino/errors';
 
 import buildTestApp from './testApp';
 import MoviesFreakApp from '../../api/index';

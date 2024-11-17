@@ -31,7 +31,7 @@ class TestRunner {
       // eslint-disable-next-line import/no-dynamic-require, global-require
       const TestClases = require(testFileDir);
 
-      const testModule = testFileDir.split('../')[1]
+      const testModule = testFileDir.split('../../')[1]
         .split('.')[0]
         .split('/')
         .join('.');

@@ -5,7 +5,9 @@ import { v4 as uuid } from 'uuid';
 
 import buildFixtureGenerator from './fixtures';
 import getDatabase from '../database';
-import * as Classpuccino from '../classpuccino';
+import {
+  TestCase as ClasspuccinoTestCase
+} from 'jesusx21/classpuccino';
 import FixturesGenerator from './fixtures/generator';
 import { Environment, Json, UUID } from '../types/common';
 import {
@@ -32,7 +34,7 @@ import {
   UserFixture,
   WatchlistFixture,
 } from './fixtures/types';
-import { fixtureGeneratorRecipe } from './fixtures/generator/types';
+import { FixtureGeneratorRecipe } from './fixtures/generator/types';
 
 class SandboxNotInitialized extends Error {
   get name() {
@@ -40,7 +42,7 @@ class SandboxNotInitialized extends Error {
   }
 }
 
-class TestCase extends Classpuccino.TestCase {
+class TestCase extends ClasspuccinoTestCase {
   private fixturesGenerator: FixturesGenerator;
   private sandbox?: sinon.SinonSandbox;
 
@@ -109,12 +111,12 @@ class TestCase extends Classpuccino.TestCase {
     this.sandbox.restore();
   }
 
-  stubFunction(target: any, fn: string) {
+  stubFunction(instance: any, functionName: string) {
     if (!this.sandbox) {
       throw new SandboxNotInitialized();
     }
 
-    return this.sandbox.stub(target, fn);
+    return this.sandbox.stub(instance, functionName);
   }
 
   generateUUID(): UUID {
@@ -393,7 +395,7 @@ class TestCase extends Classpuccino.TestCase {
     return database.sessions.create(session);
   }
 
-  generateFixtures<T>(options: fixtureGeneratorRecipe){
+  generateFixtures<T>(options: FixtureGeneratorRecipe){
     const { type } = options;
     let { quantity, recipe = [] } = options;
 

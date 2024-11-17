@@ -3,7 +3,7 @@ import path from 'path';
 
 import TestRunner from './testsRunner';
 
-const directoryPath = path.join('../', process.argv[2]);
+const directoryPath = path.join('../../', process.argv[2]);
 const testRunner = new TestRunner(directoryPath);
 
 const resolve = () => {

@@ -1,30 +1,32 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "target": "ES2016",
-    "allowJs": true,
-    "strict": true,
-    "sourceMap": true,
-    "inlineSources": true,
-    "declaration": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
-    "declarationDir": "dist/types",
-    "typeRoots": [
-      "./types",
-      "./node_modules/@types/"
-    ]
+    "baseUrl": "./",
+    "declaration": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "outDir": "dist",
+    "removeComments": false,
+    "target": "ES2016",
+    "paths": {
+      "jesusx21": ["jesusx21/"],
+      "jesusx21/*": ["jesusx21/*"],
+      "tests": ["tests/"],
+      "tests/*": ["tests/*"],
+      "*": ["src/*"]
+    }
   },
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+},
+  "exclude": ["node_modules"],
   "include": [
-    "./types/**/*",
-    "./**/*.ts"
-  ],
-  "exclude": [
-    "./migration/*",
-    "./node_modules/**/*",
-    "./tests/**/*",
-    "./dist/**/*"
+    "./jesusx21/**/*",
+    "./src/**/*",
+    "./tests/**/*"
   ]
 }

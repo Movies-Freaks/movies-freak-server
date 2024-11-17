@@ -1,17 +1,15 @@
-// Update with your config settings.
-
 import { Knex } from 'knex';
-import { Environment } from './types/common';
 
 type knexConfig = {
-  [Environment.TEST]: Knex.Config;
-  [Environment.DEVELOPMENT]: Knex.Config;
-  [Environment.STAGING]: Knex.Config;
-  [Environment.PRODUCTION]: Knex.Config;
+  test: Knex.Config;
+  ci: Knex.Config;
+  develop: Knex.Config;
+  staging: Knex.Config;
+  production: Knex.Config;
 };
 
 const knexConfig: knexConfig = {
-  [Environment.TEST]: {
+  test: {
     client: 'postgres',
     connection: {
       database: 'movies_freak_test',
@@ -19,16 +17,22 @@ const knexConfig: knexConfig = {
       password: 'postgres'
     }
   },
-
-  [Environment.DEVELOPMENT]: {
+  ci: {
+    client: 'postgres',
+    connection: {
+      database: 'movies_freak_test',
+      user: 'postgres',
+      password: 'postgres'
+    }
+  },
+  develop: {
     client: 'postgres',
     connection: {
       database: 'movies_freak_dev',
       user: 'postgres'
     }
   },
-
-  [Environment.STAGING]: {
+  staging: {
     client: 'postgresql',
     connection: {
       database: 'my_db',
@@ -43,8 +47,7 @@ const knexConfig: knexConfig = {
       tableName: 'knex_migrations'
     }
   },
-
-  [Environment.PRODUCTION]: {
+  production: {
     client: 'postgresql',
     connection: {
       database: 'my_db',
