@@ -1,10 +1,11 @@
-import { WatchHub } from 'moviesFreak/entities';
+import Serializer, { SerializerError } from 'jesusx21/serializer';
+
 import SQLTestCase from '../testCase';
 import watchHubsFixture from 'tests/src/fixtures/watchHubs';
-import { WatchHubPrivacy } from 'database/schemas';
-import Serializer, { SerializerError } from 'jesusx21/serializer';
+
 import { SQLDatabaseException } from 'database/stores/sql/errors';
 import { UUID } from 'types';
+import { WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
 import { WatchHubNotFound } from 'database/stores/errors';
 
 class WatchHubsStoreTest extends SQLTestCase {

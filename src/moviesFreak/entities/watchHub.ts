@@ -1,5 +1,11 @@
-import { WatchHubPrivacy, WatchHubSchema } from 'database/schemas';
 import Entity from './entity';
+import { WatchHubSchema } from 'database/schemas';
+
+export enum WatchHubPrivacy {
+  PUBLIC = 'public',
+  PRIVATE = 'private',
+  SHARED = 'shared'
+};
 
 export default class WatchHub extends Entity {
   name: string;

@@ -1,10 +1,5 @@
 import { UUID } from 'types';
-
-export enum WatchHubPrivacy {
-  PUBLIC = 'public',
-  PRIVATE = 'private',
-  SHARED = 'shared'
-};
+import { WatchHubPrivacy } from 'moviesFreak/entities/watchHub';
 
 type StoreSchema = {
   id?: UUID,

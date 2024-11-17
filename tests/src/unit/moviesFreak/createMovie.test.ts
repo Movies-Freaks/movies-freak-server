@@ -11,7 +11,7 @@ import { DatabaseError } from 'database/errors';
 const IMDB_ID = 'tt0111161';
 
 export class CreateMovieTest extends TestCase {
-  protected useCase: CreateMovie;
+  protected createMovie: CreateMovie;
   protected database: Database;
   protected imdb: LocalIMDBGateway;
 
@@ -21,11 +21,11 @@ export class CreateMovieTest extends TestCase {
     this.database = this.getDatabase();
     this.imdb = new LocalIMDBGateway();
 
-    this.useCase = new CreateMovie(this.database, this.imdb, IMDB_ID);
+    this.createMovie = new CreateMovie(this.database, this.imdb, IMDB_ID);
   }
 
   async testCreateMovie() {
-    const movie = await this.useCase.execute();
+    const movie = await this.createMovie.execute();
 
     this.assertThat(movie).isInstanceOf(Movie);
     this.assertThat(movie.id).doesExist();
@@ -52,8 +52,8 @@ export class CreateMovieTest extends TestCase {
   }
 
   async testReturnsMovieWhenAlreadyExists() {
-    const movie = await this.useCase.execute();
-    const secondMovie = await this.useCase.execute();
+    const movie = await this.createMovie.execute();
+    const secondMovie = await this.createMovie.execute();
 
     this.assertThat(secondMovie.id).isEqual(movie.id)
   }
@@ -63,7 +63,7 @@ export class CreateMovieTest extends TestCase {
       .throws(new DatabaseError());
 
     const error: CouldNotCreateMovie = await this.assertThat(
-      this.useCase.execute()
+      this.createMovie.execute()
     ).willBeRejectedWith(CouldNotCreateMovie);
 
     this.assertThat(error.cause).isInstanceOf(DatabaseError);
@@ -74,7 +74,7 @@ export class CreateMovieTest extends TestCase {
       .throws(new IMDBError());
 
     const error: CouldNotCreateMovie = await this.assertThat(
-      this.useCase.execute()
+      this.createMovie.execute()
     ).willBeRejectedWith(CouldNotCreateMovie);
 
     this.assertThat(error.cause).isInstanceOf(IMDBError);
@@ -85,7 +85,7 @@ export class CreateMovieTest extends TestCase {
       .throws(new DatabaseError());
 
     const error: CouldNotCreateMovie =  await this.assertThat(
-      this.useCase.execute()
+      this.createMovie.execute()
     ).willBeRejectedWith(CouldNotCreateMovie);
 
     this.assertThat(error.cause).isInstanceOf(DatabaseError);

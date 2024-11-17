@@ -1,4 +1,4 @@
-import { WatchHubPrivacy } from "database/schemas";
+import { WatchHubPrivacy } from 'moviesFreak/entities';
 
 const watchHubsFixture = [
   {
