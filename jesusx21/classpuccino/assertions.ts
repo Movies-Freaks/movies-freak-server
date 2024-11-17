@@ -151,12 +151,28 @@ class Assertions {
     throw new AssertionError('Expected value to not exist');
   }
 
+  isNil() {
+    if (this.actual === null || this.actual === undefined) {
+      return true;
+    }
+
+    throw new AssertionError('Expected value to be null or undefined');
+  }
+
   isNull() {
     if (this.actual === null) {
       return true;
     }
 
     throw new AssertionError('Expected value to be null');
+  }
+
+  isUndefined() {
+    if (this.actual === undefined) {
+      return true;
+    }
+
+    throw new AssertionError('Expected value to be undefined');
   }
 
   hasLengthOf(length: number) {

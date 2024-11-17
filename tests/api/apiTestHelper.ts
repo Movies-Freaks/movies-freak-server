@@ -43,21 +43,6 @@ class APITestCase extends TestCase {
     this.moviesFreakApp = this.buildTestApp(this.getDatabase());
   }
 
-  async simulateGet<T>(params: GetRequestParams): Promise<T> {
-    const {
-      path,
-      query = {},
-      statusCode = 200
-    } = params;
-
-    const { body } = await request(this.moviesFreakApp.getExpressApp())
-      .get(`/movies-freak/api/v1${path}`)
-      .query(query)
-      .expect(statusCode);
-
-    return body;
-  }
-
   async registerUser(data: SignUpData) {
     const [userData] = await this.generateFixtures<UserFixture>({
       type: 'user',

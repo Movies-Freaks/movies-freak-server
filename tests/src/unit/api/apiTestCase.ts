@@ -15,6 +15,11 @@ class MoviesFreakAppTest extends MoviesFreakApp {
   }
 }
 
+enum RequestVerb {
+  POST = 'post',
+  GET = 'get'
+};
+
 type RequestParams = {
   path: string;
   authorization?: string;
@@ -22,7 +27,11 @@ type RequestParams = {
 };
 
 type PostRequestParams = RequestParams & {
-  payload: Json
+  payload?: Json
+}
+
+type GetRequestParams = RequestParams & {
+  query?: Json
 }
 
 export default class APITestCase extends TestCase {
@@ -42,22 +51,27 @@ export default class APITestCase extends TestCase {
 
   async simulatePost<T>(params: PostRequestParams): Promise<T> {
     const {
-      path,
-      authorization,
       payload = {},
-      statusCode = 201
+      statusCode = 201,
+      ...requestParams
     } = params;
 
-    const requestBuilder = request(this.moviesFreak.getApp())
-      .post(`/api/v1${path}`)
-      .set('Accept', 'application/json')
-
-    if (!!authorization) {
-      requestBuilder.set('Authorization', authorization)
-    }
-
-    const { body } = await requestBuilder
+    const { body } = await this.initRequest(RequestVerb.POST, requestParams)
       .send(payload)
+      .expect(statusCode);
+
+    return body;
+  }
+
+  async simulateGet<T>(params: GetRequestParams): Promise<T> {
+    const {
+      query = {},
+      statusCode = 200,
+      ...requestParams
+    } = params;
+
+    const { body } = await this.initRequest(RequestVerb.GET, requestParams)
+      .query(query)
       .expect(statusCode);
 
     return body;
@@ -67,5 +81,19 @@ export default class APITestCase extends TestCase {
     this.moviesFreak = new MoviesFreakAppTest(config.server.host, config.server.port);
 
     this.moviesFreak.initialize(database, imdb);
+  }
+
+  private initRequest(verb: RequestVerb, params: RequestParams) {
+    const { path, authorization } = params;
+
+    const requestBuilder = request(this.moviesFreak.getApp())
+      [verb](`/api/v1${path}`)
+      .set('Accept', 'application/json');
+
+    if (!!authorization) {
+      requestBuilder.set('Authorization', authorization);
+    }
+
+    return requestBuilder;
   }
 }
