@@ -1,6 +1,6 @@
 import Serializer, { SerializerError } from 'jesusx21/serializer';
 
-import moviesFixture from './fixtures/movies';
+import moviesFixture from 'tests/src/fixtures/movies';
 import SQLTestCase from '../testCase';
 
 import { IMDBIdAlreadyExists } from 'database/stores/errors';

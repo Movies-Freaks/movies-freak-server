@@ -40,7 +40,7 @@ export default class MemoryMoviesStore extends AbstractMemoryStore<Movie> {
 
     return {
       totalItems: items.length,
-      items: itemsSorted.slice(skip, limit)
+      items: itemsSorted.slice(skip, skip + limit)
     }
   }
 

@@ -5,3 +5,9 @@ export class CouldNotCreateMovie extends MoviesFreakError {
     super({ error });
   }
 }
+
+export class CouldNotGetMovies extends MoviesFreakError {
+  constructor(error: Error) {
+    super({ error });
+  }
+}

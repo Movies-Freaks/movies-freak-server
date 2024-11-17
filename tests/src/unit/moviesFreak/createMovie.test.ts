@@ -11,9 +11,9 @@ import { DatabaseError } from 'database/errors';
 const IMDB_ID = 'tt0111161';
 
 export class CreateMovieTest extends TestCase {
-  private useCase: CreateMovie;
-  private database: Database;
-  private imdb: LocalIMDBGateway;
+  protected useCase: CreateMovie;
+  protected database: Database;
+  protected imdb: LocalIMDBGateway;
 
   setUp() {
     super.setUp();
