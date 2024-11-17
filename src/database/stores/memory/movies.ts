@@ -1,9 +1,6 @@
-import { get, isEmpty } from 'lodash';
-
 import AbstractMemoryStore from './abstractMemoryStore';
 import { Movie } from 'moviesFreak/entities';
 import { MovieNotFound, NotFound } from '../errors';
-import { Sort, SortOrder } from '../types';
 import { UUID } from 'types';
 
 export default class MemoryMoviesStore extends AbstractMemoryStore<Movie> {
@@ -29,39 +26,5 @@ export default class MemoryMoviesStore extends AbstractMemoryStore<Movie> {
 
       throw error;
     }
-  }
-
-  async findAll(limit: number, skip: number, sort?: Sort) {
-    if (isEmpty(sort)) {
-      sort = { createdAt: SortOrder.ASC }
-    }
-
-    const items = this.all();
-    const itemsSorted = this.applySorting(items, sort);
-
-    return {
-      totalItems: items.length,
-      items: itemsSorted.slice(skip, skip + limit)
-    }
-  }
-
-  private applySorting(movies: Movie[], sort: Sort) {
-    return Object.keys(sort)
-      .reduce((prev, field) => {
-        const order = sort[field];
-
-        return prev.sort((movieA, movieB) => {
-          if (order === SortOrder.DESC) {
-            if (get(movieA, field) < get(movieB, field)) return 1;
-            if (get(movieA, field) > get(movieB, field)) return -1;
-          }
-          else {
-            if (get(movieA, field) > get(movieB, field)) return 1;
-            if (get(movieA, field) < get(movieB, field)) return -1;
-          }
-
-          return 0;
-        });
-      }, movies);
   }
 }

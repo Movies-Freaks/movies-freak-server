@@ -118,3 +118,50 @@ export class FindByIdTest extends WatchHubsStoreTest {
     ).willBeRejectedWith(SQLDatabaseException);
   }
 }
+
+export class FindAll extends WatchHubsStoreTest {
+  async testFindAllWatchHubs() {
+    const { totalItems, items: watchHubs } = await this.database
+      .watchHubs
+      .findAll(100, 0);
+
+    this.assertThat(watchHubs).hasLengthOf(5);
+    this.assertThat(totalItems).isEqual(5);
+
+    watchHubs.forEach((watchHub) => this.assertThat(watchHub).isInstanceOf(WatchHub));
+  }
+
+  async testFindWithSkipAndLimit() {
+    const { totalItems, items: watchHubs } = await this.database
+      .watchHubs
+      .findAll(2, 1);
+
+    this.assertThat(watchHubs).hasLengthOf(2);
+    this.assertThat(totalItems).isEqual(5);
+    this.assertThat(watchHubs[0].name).isEqual('A Very Christmas List');
+    this.assertThat(watchHubs[1].name).isEqual('Saint Valentine');
+  }
+
+  async testReturnEmptyListWhenThereIsNotWatchHubs() {
+    await this.cleanDatabase();
+    this.buildDatabase();
+
+    const { totalItems, items: watchHubs } = await this.getDatabase()
+      .watchHubs
+      .findAll(100, 0);
+
+    this.assertThat(watchHubs).isEmpty();
+    this.assertThat(totalItems).isEqual(0);
+  }
+
+  async testThrowErrorOnUnexpectedError() {
+    this.stubFunction(this.database.watchHubs, 'connection')
+      .throws(new Error());
+
+    await this.assertThat(
+      this.database
+        .watchHubs
+        .findAll(100, 0)
+    ).willBeRejectedWith(SQLDatabaseException);
+  }
+}
