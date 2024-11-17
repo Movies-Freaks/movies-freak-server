@@ -1,14 +1,14 @@
 import { HTTPBadInput, HTTPInternalError, Monopoly } from 'jesusx21/boardGame';
 import { HTTPStatusCode, Request, Response } from 'jesusx21/boardGame/types';
+import { isEmpty } from 'lodash';
 
 import CreateMovie from 'moviesFreak/createMovie';
-import { Database } from 'database';
-import { IMDB } from 'services/imdb/types';
-import { Movie } from 'moviesFreak/entities';
-import { isEmpty } from 'lodash';
 import GetMovies from 'moviesFreak/getMovies';
 import Pagination from 'api/pagination';
+import { Database } from 'database';
+import { IMDB } from 'services/imdb/types';
 import { Json } from 'types';
+import { Movie } from 'moviesFreak/entities';
 
 export default class MoviesResource extends Monopoly {
   async onPost(request: Request): Promise<Response> {

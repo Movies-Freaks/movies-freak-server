@@ -1,11 +1,12 @@
-import { Movie } from 'moviesFreak/entities';
-import CreateMovie from 'moviesFreak/createMovie';
-import { APIError, HTTPStatusCode } from 'jesusx21/boardGame/types';
+import { HTTPStatusCode } from 'jesusx21/boardGame/types';
+
 import APITestCase from '../apiTestCase';
+
+import CreateMovie from 'moviesFreak/createMovie';
 
 export class CreateMovieTest extends APITestCase {
   async testCreateMovie() {
-    const result = await this.simulatePost<Movie>({
+    const result = await this.simulatePost({
       path: '/movies',
       payload: { imdbId: 'fakeIMDBId' }
     });
@@ -34,7 +35,7 @@ export class CreateMovieTest extends APITestCase {
   }
 
   async testReturnsErrorWhenIMDBIdIsNotSent() {
-    const result = await this.simulatePost<APIError>({
+    const result = await this.simulatePost({
       path: '/movies',
       payload: {},
       statusCode: HTTPStatusCode.BAD_REQUEST
@@ -48,7 +49,7 @@ export class CreateMovieTest extends APITestCase {
       .expects('execute')
       .throws(new Error('database fails'));
 
-    const result = await this.simulatePost<APIError>({
+    const result = await this.simulatePost({
       path: '/movies',
       payload: { imdbId: 'fakeIMDBId' },
       statusCode: HTTPStatusCode.UNEXPECTED_ERROR

@@ -79,6 +79,10 @@ export default abstract class BoardGame {
     resourceInstance: Monopoly,
     middlewares: Middleware[] = []
   ) {
+    resourcePath = resourcePath.startsWith('/')
+      ? resourcePath.substring(1)
+      : resourcePath;
+
     const [resource, path = ''] = resourcePath.split('/');
 
     if (!this.endpoints[resource]) {

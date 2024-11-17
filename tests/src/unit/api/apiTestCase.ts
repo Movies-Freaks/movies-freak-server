@@ -49,7 +49,7 @@ export default class APITestCase extends TestCase {
     this.buildTestApp(this.database, this.imdb);
   }
 
-  async simulatePost<T>(params: PostRequestParams): Promise<T> {
+  async simulatePost(params: PostRequestParams): Promise<Json> {
     const {
       payload = {},
       statusCode = 201,
