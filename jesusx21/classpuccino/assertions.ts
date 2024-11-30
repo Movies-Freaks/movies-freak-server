@@ -40,6 +40,16 @@ class Assertions {
     );
   }
 
+  isEqualDate(expected: Date) {
+    const isEqual = this.dateAsString(this.actual) === this.dateAsString(expected);
+
+    if (isEqual) return true;
+
+    throw new AssertionError(
+      `Expected ${this.actual.toISOString()} to have equal date to ${expected.toISOString()}`
+    );
+  }
+
   isNotEqual(expected: any) {
     if (!isEqual(this.actual, expected)) {
       return true;
@@ -208,6 +218,13 @@ class Assertions {
     throw new AssertionError(
       `Expected ${JSON.stringify(this.actual)} to have a keys ${JSON.stringify(args)}`
     );
+  }
+
+  private dateAsString(date: Date) {
+    return date
+      .toISOString()
+      .split('T')
+      .at(0);
   }
 }
 
