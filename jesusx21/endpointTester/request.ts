@@ -3,6 +3,7 @@ import { isNil } from 'lodash';
 
 import {
   GetParams,
+  Json,
   Method,
   PostParams,
   RequestParams
@@ -29,19 +30,22 @@ export default class Request {
       : params.endpoint;
 
     const url = `${this.api}/${endpoint}`;
-    const data = params.body ?? params.query;
     const { headers = {} } = params;
 
+    const requestData: Json = {
+      method,
+      url,
+      headers: {
+        ...headers,
+        Authorization: params.authentication
+      }
+    };
+
+    if (method === Method.POST) requestData.data = JSON.stringify(params.body);
+    if (method === Method.GET) requestData.params = params.query;
+
     try {
-      const response = await axios({
-        method,
-        url,
-        data,
-        headers: {
-          ...headers,
-          Authorization: params.authentication
-        }
-      });
+      const response = await axios(requestData);
 
       return response.data;
     } catch (error) {

@@ -9,9 +9,11 @@ import { Database } from 'database';
 import { IMDB } from 'services/imdb/types';
 import { Json } from 'types';
 import { Movie } from 'moviesFreak/entities';
+import { MovieList } from '../types';
+import { MovieSchema } from 'database/schemas';
 
 export default class MoviesResource extends Monopoly {
-  async onPost(request: Request): Promise<Response> {
+  async onPost(request: Request): Promise<Response<MovieSchema>> {
     const database: Database = this.getTitle('database');
     const imdb: IMDB = this.getTitle('imdb');
     const { imdbId } = request.body ?? {};
@@ -35,7 +37,7 @@ export default class MoviesResource extends Monopoly {
     };
   }
 
-  async onGet(request: Request): Promise<Response> {
+  async onGet(request: Request): Promise<Response<MovieList>> {
     const database: Database = this.getTitle('database');
     const { query } = request;
 
@@ -76,6 +78,6 @@ export default class MoviesResource extends Monopoly {
           totalPages: pagination.totalPages
         }
       }
-    }
+    };
   }
 }

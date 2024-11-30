@@ -68,9 +68,9 @@ export type Request = {
   query: Json;
 };
 
-export type Response = {
+export type Response<T = Json> = {
   status: HTTPStatusCode,
-  data: Json
+  data: T
 };
 
 export type SpecifedJson<T> = {

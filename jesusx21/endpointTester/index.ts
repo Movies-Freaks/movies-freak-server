@@ -11,4 +11,14 @@ function runRequest(verb: Method, requestData: RequestParams) {
     .catch((error) => console.error('Error:', error));
 }
 
-runRequest(Method.GET, { endpoint: '/movies?page=5&perPage=10&sort=director' });
+runRequest(
+  Method.GET,
+  {
+    endpoint: '/watchHubs',
+    query: {
+      page: 2,
+      perPage: 2,
+      sort: '-name'
+    }
+  }
+);

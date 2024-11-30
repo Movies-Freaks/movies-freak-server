@@ -1,7 +1,8 @@
-import moviesFixture from 'tests/src/fixtures/movies';
 import APITestCase from '../apiTestCase';
+import moviesFixture from 'tests/src/fixtures/movies';
+
 import { Movie } from 'moviesFreak/entities';
-import { Json } from 'types';
+import { MovieList } from 'api/v1/types';
 
 export class GetMoviesTest extends APITestCase {
   protected movies: Movie[];
@@ -13,7 +14,7 @@ export class GetMoviesTest extends APITestCase {
   }
 
   async testGetMoviesWithoutSendingPagination() {
-    const result = await this.simulateGet<Json>({ path: '/movies' });
+    const result = await this.simulateGet<MovieList>({ path: '/movies' });
 
     this.assertThat(result.items).hasLengthOf(5);
     this.assertThat(result.pagination.page).isEqual(1);
@@ -22,7 +23,7 @@ export class GetMoviesTest extends APITestCase {
   }
 
   async testGetMoviesWithoutSendingPage() {
-    const result = await this.simulateGet<Json>({
+    const result = await this.simulateGet<MovieList>({
       path: '/movies',
       query: { perPage: 2 }
     });
@@ -34,7 +35,7 @@ export class GetMoviesTest extends APITestCase {
   }
 
   async testGetMoviesWithoutSendingPerPage() {
-    const result = await this.simulateGet<Json>({
+    const result = await this.simulateGet<MovieList>({
       path: '/movies',
       query: { page: 1 }
     });
@@ -46,7 +47,7 @@ export class GetMoviesTest extends APITestCase {
   }
 
   async testGetMoviesWithSendingPagination() {
-    const result = await this.simulateGet<Json>({
+    const result = await this.simulateGet<MovieList>({
       path: '/movies',
       query: { page: 3, perPage: 2 }
     });
@@ -58,7 +59,7 @@ export class GetMoviesTest extends APITestCase {
   }
 
   async testGetMoviesWithAscendingSort() {
-    const result = await this.simulateGet<Json>({
+    const result = await this.simulateGet<MovieList>({
       path: '/movies',
       query: { sort: 'name' }
     });
@@ -71,7 +72,7 @@ export class GetMoviesTest extends APITestCase {
   }
 
   async testGetMoviesWithDescendingSort() {
-    const result = await this.simulateGet<Json>({
+    const result = await this.simulateGet<MovieList>({
       path: '/movies',
       query: { sort: '-name' }
     });

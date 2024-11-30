@@ -52,7 +52,7 @@ export default class MoviesFreakApp extends BoardGame {
   }
 
   protected isDevelopmentEnv(): boolean {
-    return config.isProductionEnv;
+    return config.isDevelopEnv;
   }
 
   protected isProductionEnv(): boolean {

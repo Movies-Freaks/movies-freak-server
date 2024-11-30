@@ -17,6 +17,6 @@ export default class MoviesFreakAPI {
     const watchHubsResource = new WatchHubsResource();
 
     this.app.registerResource('/movies', moviesResource, [parseQuerySort]);
-    this.app.registerResource('/watchHubs', watchHubsResource);
+    this.app.registerResource('/watchHubs', watchHubsResource, [parseQuerySort]);
   }
 }
