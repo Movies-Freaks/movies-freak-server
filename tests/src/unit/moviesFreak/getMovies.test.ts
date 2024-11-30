@@ -1,11 +1,12 @@
+import moviesFixture from 'tests/src/fixtures/movies';
 import TestCase from 'tests/src/testCase';
 
 import GetMovies from 'moviesFreak/getMovies';
-import moviesFixture from 'tests/src/fixtures/movies';
 import { CouldNotGetMovies } from 'moviesFreak/errors';
 import { Database } from 'database';
 import { DatabaseError } from 'database/errors';
 import { Movie } from 'moviesFreak/entities';
+import { SortOrder } from 'database/stores/types';
 
 export class GetMoviesTest extends TestCase {
   protected database: Database;
@@ -15,7 +16,7 @@ export class GetMoviesTest extends TestCase {
     super.setUp();
     this.database = this.getDatabase();
 
-    this.loadFixtures();
+    await this.loadFixtures();
   }
 
   async testReturnPaginatedMovies() {
@@ -28,7 +29,7 @@ export class GetMoviesTest extends TestCase {
   }
 
   async testReturnMoviesSortedAscendentByName() {
-    const getMovies = new GetMovies(this.database, 10, 0, 'name');
+    const getMovies = new GetMovies(this.database, 10, 0, { name: SortOrder.ASC });
 
     const result = await getMovies.execute();
 
@@ -41,7 +42,7 @@ export class GetMoviesTest extends TestCase {
   }
 
   async testReturnMoviesSortedDescendentByName() {
-    const getMovies = new GetMovies(this.database, 10, 0, '-name');
+    const getMovies = new GetMovies(this.database, 10, 0, { name: SortOrder.DESC });
 
     const result = await getMovies.execute();
 

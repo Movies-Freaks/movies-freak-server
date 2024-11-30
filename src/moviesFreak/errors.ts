@@ -17,3 +17,9 @@ export class CouldNotCreateWatchHub extends MoviesFreakError {
     super({ error });
   }
 }
+
+export class CouldNotGetWatchHubs extends MoviesFreakError {
+  constructor(error: Error) {
+    super({ error });
+  }
+}

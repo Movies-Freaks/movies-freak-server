@@ -41,7 +41,6 @@ export default class MoviesResource extends Monopoly {
 
     const page = isEmpty(query.page) ? query.page : Number(query.page);
     const perPage = isEmpty(query.perPage) ? query.perPage : Number(query.perPage);
-    const { sort = '' } = query;
 
     const pagination = new Pagination(page, perPage);
 
@@ -52,7 +51,7 @@ export default class MoviesResource extends Monopoly {
       database,
       pagination.limit,
       pagination.skip,
-      sort
+      query.sort
     );
 
     let result: Json;

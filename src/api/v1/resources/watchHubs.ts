@@ -12,8 +12,6 @@ export default class WatchHubsResource extends Monopoly {
     const database: Database = this.getTitle('database');
     const { name, privacy, description } = request.body;
 
-    console.log(VALID_PRIVACIES)
-
     if (!VALID_PRIVACIES.includes(privacy)) throw new HTTPBadInput('PRIVACY_NOT_SUPPORTED');
 
     const createWatchHub = new CreateWatchHub(database, name, privacy, description);

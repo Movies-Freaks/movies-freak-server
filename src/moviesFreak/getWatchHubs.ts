@@ -1,8 +1,8 @@
-import { CouldNotGetMovies } from './errors';
+import { CouldNotGetWatchHubs } from './errors';
 import { Database } from 'database';
 import { Sort } from 'database/stores/types';
 
-export default class GetMovies {
+export default class GetWatchHubs {
   private database: Database;
   private limit: number;
   private skip: number;
@@ -18,10 +18,10 @@ export default class GetMovies {
   async execute() {
     try {
       return await this.database
-        .movies
+        .watchHubs
         .findAll(this.limit, this.skip, this.sort)
     } catch (error: any) {
-      throw new CouldNotGetMovies(error);
+      throw new CouldNotGetWatchHubs(error);
     }
   }
 }
