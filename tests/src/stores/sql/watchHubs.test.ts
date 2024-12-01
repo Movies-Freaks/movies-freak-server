@@ -54,10 +54,10 @@ export class CreateWatchHubTest extends WatchHubsStoreTest {
 
   async testThrowErrorOnSQLException() {
     this.stubFunction(this.database.watchHubs, 'connection')
-      .throws(new SerializerError());
+      .throws(new Error());
 
     await this.assertThat(
-      this.database.watchHubs.create(this.buildWatchHub())
+      this.database.watchHubs.create(this.watchHubToCreate)
     ).willBeRejectedWith(SQLDatabaseException);
   }
 

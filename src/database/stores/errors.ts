@@ -3,7 +3,6 @@ import { isPlainObject } from 'lodash';
 import { DatabaseError } from '../errors';
 import { Json, UUID } from 'types';
 
-
 export class InvalidData extends DatabaseError {
   constructor(data: Json, error?: any) {
     super({
@@ -14,11 +13,21 @@ export class InvalidData extends DatabaseError {
   }
 }
 
-export class IMDBIdAlreadyExists extends DatabaseError {
+export class IMDBIdAlreadyExists extends InvalidData {
   constructor(imdbId: string) {
-    super({
-      info: { imdbId }
-    });
+    super({ imdbId });
+  }
+}
+
+export class UsernameAlreadyExists extends InvalidData {
+  constructor(username: string) {
+    super({ username });
+  }
+}
+
+export class EmailAlreadyExists extends InvalidData {
+  constructor(username: string) {
+    super({ username });
   }
 }
 
@@ -32,4 +41,5 @@ export class NotFound extends DatabaseError {
 }
 
 export class MovieNotFound extends NotFound {}
+export class UserNotFound extends NotFound {}
 export class WatchHubNotFound extends NotFound {}

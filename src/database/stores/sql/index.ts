@@ -1,18 +1,21 @@
 import { Knex } from 'knex';
 
 import SQLMoviesStore from './movies';
+import SQLUsersStore from './users';
 import SQLWatchHubsStore from './watchHubs';
 
 export default class SQLDatabase {
   readonly connection: Knex;
 
   readonly movies: SQLMoviesStore;
+  readonly users: SQLUsersStore;
   readonly watchHubs: SQLWatchHubsStore;
 
   constructor(connection: Knex) {
     this.connection = connection;
 
     this.movies = new SQLMoviesStore(this.connection);
+    this.users = new SQLUsersStore(this.connection);
     this.watchHubs = new SQLWatchHubsStore(this.connection);
   }
 }

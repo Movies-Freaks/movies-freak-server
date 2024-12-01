@@ -8,25 +8,40 @@ type StoreSchema = {
 }
 
 export type MovieSchema = StoreSchema & {
-  name: string,
-  plot: string,
-  title: string,
-  year: string,
-  rated: string,
-  runtime: string,
-  director: string,
-  poster: string,
-  production: string,
-  genre: string[],
-  writers: string[],
   actors: string[],
+  director: string,
+  genre: string[],
   imdbId: string,
   imdbRating: string,
+  name: string,
+  plot: string,
+  poster: string,
+  production: string,
+  rated: string,
+  runtime: string,
+  title: string,
+  writers: string[],
+  year: string
+};
+
+export type UserPasswordSchema = {
+  hash: string,
+  salt: string
+};
+
+export type UserSchema = StoreSchema & {
+  birthdate: Date,
+  email: string,
+  firstLastName: string,
+  name: string,
+  password: UserPasswordSchema,
+  username: string,
+  secondLastName?: string
 };
 
 export type WatchHubSchema = StoreSchema & {
+  description: string,
   name: string,
   privacy: WatchHubPrivacy,
-  description: string,
-  totalMovies?: number,
+  totalMovies?: number
 }
