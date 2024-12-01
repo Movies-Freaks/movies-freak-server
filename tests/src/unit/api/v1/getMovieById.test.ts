@@ -1,25 +1,20 @@
 import { APIError, HTTPStatusCode } from 'jesusx21/boardGame/types';
 
 import APITestCase from '../apiTestCase';
-import moviesFixture from 'tests/src/fixtures/movies';
+import { Resources } from 'tests/src/fixtures/type';
 
 import GetMovieById from 'moviesFreak/movies/getById';
-import { Database } from 'database';
-import { Movie } from 'moviesFreak/entities';
 import { MovieSchema } from 'database/schemas';
 import { UUID } from 'types';
 
 export class GetMovieByIdTest extends APITestCase {
-  database: Database;
-
   protected movieId: UUID;
-  protected movies: Movie[];
 
   async setUp() {
     super.setUp();
 
-    await this.loadFixtures();
-    this.movieId = this.movies[2].id;
+    const { movies } = await this.loadFixtures(this.database, Resources.MOVIES);
+    this.movieId = movies[2].id;
   }
 
   async testGetMovieByItsId() {
@@ -50,15 +45,5 @@ export class GetMovieByIdTest extends APITestCase {
     });
 
     this.assertThat(result.code).isEqual('UNEXPECTED_ERROR');
-  }
-
-  private async loadFixtures() {
-    const moviesPromises = moviesFixture.map(movieData => {
-      const movie = new Movie(movieData);
-
-      return this.database.movies.create(movie);
-    });
-
-    this.movies = await Promise.all(moviesPromises);
   }
 }

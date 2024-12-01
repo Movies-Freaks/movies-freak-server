@@ -61,6 +61,7 @@ Don't forget to add the sufix `Test` to your test class and the prefix `test` fo
 - **mockFunction(instance: any, functionName: string): SinonStub** Mocks the function received of the instance received with the help of sinon.sandbox.
 - **restoreSandbox: void** Restores all mocks, stubs and spies created and detaches the previously created sandbox.
 - **stubFunction(instance: any, functionName: string): SinonStub** Stubs the function received of the instance received with the help of sinon.sandbox.
+- **loadFixtures(database: Databaes, resource: Resources): Fixtures** Insert into the database the preloaded fixtures for the specified resource. If the resource is not provided, it will load all of the available resources.
 
 #### SQL Test Helper
 For the sql tests we have available the previously mentioned helpers along wiht the following

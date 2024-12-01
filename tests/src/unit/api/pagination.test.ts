@@ -1,5 +1,6 @@
-import Pagination from 'api/pagination';
 import TestCase from 'tests/src/testCase';
+
+import Pagination from 'api/pagination';
 
 export class PaginationTest extends TestCase {
   testSetPageDefault() {

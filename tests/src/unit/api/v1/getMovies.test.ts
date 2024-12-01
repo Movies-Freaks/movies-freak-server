@@ -1,7 +1,7 @@
 import { APIError, HTTPStatusCode } from 'jesusx21/boardGame/types';
 
 import APITestCase from '../apiTestCase';
-import moviesFixture from 'tests/src/fixtures/movies';
+import { Resources } from 'tests/src/fixtures/type';
 
 import GetMovies from 'moviesFreak/movies/getList';
 import { Movie } from 'moviesFreak/entities';
@@ -13,7 +13,8 @@ export class GetMoviesTest extends APITestCase {
   async setUp() {
     super.setUp();
 
-    await this.loadFixtures();
+    const fixtures = await this.loadFixtures(this.database, Resources.MOVIES);
+    this.movies = fixtures.movies;
   }
 
   async testGetMoviesWithoutSendingPagination() {
@@ -98,15 +99,5 @@ export class GetMoviesTest extends APITestCase {
     });
 
     this.assertThat(result.code).isEqual('UNEXPECTED_ERROR');
-  }
-
-  private async loadFixtures() {
-    const moviesPromises = moviesFixture.map(movieData => {
-      const movie = new Movie(movieData);
-
-      return this.database.movies.create(movie);
-    });
-
-    this.movies = await Promise.all(moviesPromises);
   }
 }

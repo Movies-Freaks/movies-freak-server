@@ -1,7 +1,7 @@
 import Serializer, { SerializerError } from 'jesusx21/serializer';
 
-import moviesFixture from 'tests/src/fixtures/movies';
 import SQLTestCase from '../testCase';
+import { Resources } from 'tests/src/fixtures/type';
 
 import { IMDBIdAlreadyExists } from 'database/stores/errors';
 import { Movie } from 'moviesFreak/entities';
@@ -15,17 +15,8 @@ class MoviesStoreTest extends SQLTestCase {
   async setUp() {
     super.setUp();
 
-    await this.loadFixtures();
-  }
-
-  private async loadFixtures() {
-    const promises = moviesFixture.map((movieData) => {
-      const movie = new Movie(movieData);
-
-      return this.database.movies.create(movie);
-    });
-
-    this.movies = await Promise.all(promises);
+    const fixtures = await this.loadFixtures(this.database, Resources.MOVIES);
+    this.movies = fixtures.movies;
   }
 }
 

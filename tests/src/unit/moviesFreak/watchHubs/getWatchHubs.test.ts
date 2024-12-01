@@ -1,5 +1,5 @@
 import TestCase from 'tests/src/testCase';
-import watchHubsFixture from 'tests/src/fixtures/watchHubs';
+import { Resources } from 'tests/src/fixtures/type';
 
 import GetWatchHubs from 'moviesFreak/watchHubs/getList';
 import { CouldNotGetWatchHubs } from 'moviesFreak/watchHubs/errors';
@@ -16,7 +16,8 @@ export class GetWatchHubsTest extends TestCase {
     super.setUp();
     this.database = this.getDatabase();
 
-    await this.loadFixtures();
+    const fixtures = await this.loadFixtures(this.database, Resources.WATCH_HUBS);
+    this.watchHubs = fixtures.watchHubs;
   }
 
   async testReturnPaginatedWatchHubs() {
@@ -72,14 +73,5 @@ export class GetWatchHubsTest extends TestCase {
     await this.assertThat(
       getWatchHubs.execute()
     ).willBeRejectedWith(CouldNotGetWatchHubs);
-  }
-
-  private async loadFixtures() {
-    const promises = watchHubsFixture.map((watchHubData) => {
-      const watchHub = new WatchHub(watchHubData);
-      return this.database.watchHubs.create(watchHub);
-    });
-
-    this.watchHubs = await Promise.all(promises);
   }
 }

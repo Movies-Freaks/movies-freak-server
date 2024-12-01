@@ -1,5 +1,5 @@
-import moviesFixture from 'tests/src/fixtures/movies';
 import TestCase from 'tests/src/testCase';
+import { Resources } from 'tests/src/fixtures/type';
 
 import GetMovies from 'moviesFreak/movies/getList';
 import { CouldNotGetMovies } from 'moviesFreak/movies/errors';
@@ -16,7 +16,8 @@ export class GetMoviesTest extends TestCase {
     super.setUp();
     this.database = this.getDatabase();
 
-    await this.loadFixtures();
+    const fixtures = await this.loadFixtures(this.database, Resources.MOVIES);
+    this.movies = fixtures.movies;
   }
 
   async testReturnPaginatedMovies() {
@@ -72,14 +73,5 @@ export class GetMoviesTest extends TestCase {
     await this.assertThat(
       getMovies.execute()
     ).willBeRejectedWith(CouldNotGetMovies);
-  }
-
-  private async loadFixtures() {
-    const promises = moviesFixture.map((movieData) => {
-      const movie = new Movie(movieData);
-      return this.database.movies.create(movie);
-    });
-
-    this.movies = await Promise.all(promises);
   }
 }

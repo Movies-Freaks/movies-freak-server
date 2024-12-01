@@ -1,4 +1,5 @@
 import APITestCase from '../apiTestCase';
+
 import CreateWatchHub from 'moviesFreak/watchHubs/create';
 import { WatchHubPrivacy } from 'moviesFreak/entities';
 

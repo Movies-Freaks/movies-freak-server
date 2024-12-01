@@ -1,12 +1,12 @@
 import TestCase from 'tests/src/testCase';
-import watchHubsFixture from 'tests/src/fixtures/watchHubs';
+import { Resources } from 'tests/src/fixtures/type';
 
 import GetWatchHubById from 'moviesFreak/watchHubs/getById';
 import { CouldNotGetWatchHub, WatchHubNotFound } from 'moviesFreak/watchHubs/errors';
 import { Database } from 'database';
 import { DatabaseError } from 'database/errors';
 import { UUID } from 'types';
-import { WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
+import { WatchHub } from 'moviesFreak/entities';
 
 export default class GetWatchHubByIdTest extends TestCase {
   protected database: Database;
@@ -16,8 +16,8 @@ export default class GetWatchHubByIdTest extends TestCase {
     super.setUp();
 
     this.database = this.getDatabase();
-    const watchHubs = await this.loadFixtures();
 
+    const { watchHubs } = await this.loadFixtures(this.database, Resources.WATCH_HUBS);
     this.watchHubId = watchHubs[1].id;
   }
 
@@ -27,7 +27,7 @@ export default class GetWatchHubByIdTest extends TestCase {
 
     this.assertThat(watchHub).isInstanceOf(WatchHub);
     this.assertThat(watchHub.id).isEqual(this.watchHubId);
-    this.assertThat(watchHub.privacy).isEqual(WatchHubPrivacy.SHARED);
+    this.assertThat(watchHub.privacy).isEqual('shared');
     this.assertThat(watchHub.name).isEqual('A Very Christmas List');
   }
 
@@ -48,14 +48,5 @@ export default class GetWatchHubByIdTest extends TestCase {
     await this.assertThat(
       getMovieById.execute()
     ).willBeRejectedWith(CouldNotGetWatchHub);
-  }
-
-  private async loadFixtures() {
-    const promises = watchHubsFixture.map((watchHubData) => {
-      const watchHub = new WatchHub(watchHubData);
-      return this.database.watchHubs.create(watchHub);
-    });
-
-    return Promise.all(promises);
   }
 }

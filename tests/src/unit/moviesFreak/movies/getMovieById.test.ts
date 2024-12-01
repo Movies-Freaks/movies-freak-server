@@ -1,5 +1,5 @@
-import moviesFixture from 'tests/src/fixtures/movies';
 import TestCase from 'tests/src/testCase';
+import { Resources } from 'tests/src/fixtures/type';
 
 import GetMovieById from 'moviesFreak/movies/getById';
 import { CouldNotGetMovie, MovieNotFound } from 'moviesFreak/movies/errors';
@@ -16,8 +16,7 @@ export class GetMovieByIdTest extends TestCase {
     super.setUp();
     this.database = this.getDatabase();
 
-    const movies = await this.loadFixtures();
-
+    const { movies } = await this.loadFixtures(this.database, Resources.MOVIES);
     this.movieId = movies[1].id;
   }
 
@@ -48,14 +47,5 @@ export class GetMovieByIdTest extends TestCase {
     await this.assertThat(
       getMovieById.execute()
     ).willBeRejectedWith(CouldNotGetMovie);
-  }
-
-  private async loadFixtures() {
-    const promises = moviesFixture.map((movieData) => {
-      const movie = new Movie(movieData);
-      return this.database.movies.create(movie);
-    });
-
-    return Promise.all(promises);
   }
 }

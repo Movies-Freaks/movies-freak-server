@@ -1,12 +1,13 @@
-import MoviesFreakApp from 'api';
 import request from 'supertest';
-import config from 'config';
-import getDatabase from 'database';
-import { Database } from 'database';
 import { HTTPStatusCode } from 'jesusx21/boardGame/types';
-import imdbFactory from 'services/imdb/factory';
-import { IMDB } from 'services/imdb/types';
+
 import TestCase from 'tests/src/testCase';
+
+import config from 'config';
+import getDatabase, { Database } from 'database';
+import imdbFactory from 'services/imdb/factory';
+import MoviesFreakApp from 'api';
+import { IMDB } from 'services/imdb/types';
 import { Json } from 'types';
 
 class MoviesFreakAppTest extends MoviesFreakApp {

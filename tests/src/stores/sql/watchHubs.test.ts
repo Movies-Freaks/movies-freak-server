@@ -1,7 +1,7 @@
 import Serializer, { SerializerError } from 'jesusx21/serializer';
 
 import SQLTestCase from '../testCase';
-import watchHubsFixture from 'tests/src/fixtures/watchHubs';
+import { Resources } from 'tests/src/fixtures/type';
 
 import { SQLDatabaseException } from 'database/stores/sql/errors';
 import { UUID } from 'types';
@@ -14,17 +14,8 @@ class WatchHubsStoreTest extends SQLTestCase {
   async setUp() {
     super.setUp();
 
-    await this.loadFixtures();
-  }
-
-  private async loadFixtures() {
-    const promises = watchHubsFixture.map((watchHubData) => {
-      const watchHub = new WatchHub(watchHubData);
-
-      return this.database.watchHubs.create(watchHub);
-    });
-
-    this.watchHubs = await Promise.all(promises);
+    const fixtures = await this.loadFixtures(this.database, Resources.WATCH_HUBS);
+    this.watchHubs = fixtures.watchHubs;
   }
 }
 

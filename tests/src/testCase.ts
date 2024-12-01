@@ -6,6 +6,8 @@ import { TestCase as ClasspuccinoTestCase } from 'jesusx21/classpuccino';
 import getDatabase, { Database } from 'database';
 import { Class, UUID } from 'types';
 import { DatabaseDriver } from 'config/types';
+import { Resources } from './fixtures/type';
+import generateFixtures from './fixtures';
 
 class SandboxNotInitialized extends Error {
   get name() {
@@ -87,5 +89,9 @@ export default class TestCase extends ClasspuccinoTestCase {
     }
 
     return this.sandbox.stub(target, functionName);
+  }
+
+  loadFixtures(database: Database, resource?: Resources) {
+    return generateFixtures(database, resource);
   }
 }
