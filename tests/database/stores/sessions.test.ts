@@ -56,45 +56,6 @@ class SessionsStoreTest extends SQLTestCase {
   }
 }
 
-export class CreateSessionTest extends SessionsStoreTest {
-  async testCreateSession() {
-    const user = await this.getUser();
-    const session = this.buildSession(user);
-
-    const sessionCreated = await this.getDatabase()
-      .sessions
-      .create(session);
-
-    this.assertThat(sessionCreated).isInstanceOf(Session);
-    this.assertThat(sessionCreated.id).doesExist();
-    this.assertThat(sessionCreated.user?.id).isEqual(this.user?.id);
-    this.assertThat(sessionCreated.token).isEqual(session.token);
-    this.assertThat(sessionCreated.expiresAt).isEqual(session.expiresAt);
-    this.assertThat(sessionCreated.isActive()).isTrue();
-  }
-
-  async testThrowErrorOnSQLException() {
-    this.stubFunction(this.getDatabase().sessions, 'connection')
-      .throws(new Error());
-
-    const user = await this.getUser();
-    const session = this.buildSession(user);
-
-    await this.assertThat(
-      this.getDatabase()
-      .sessions
-      .create(session)
-    ).willBeRejectedWith(SQLDatabaseException);
-  }
-
-  private buildSession(user: User) {
-    const session = new Session({ user });
-
-    return session.generateToken()
-      .activateToken();
-  }
-}
-
 export class FindActiveSessionByUserIdTest extends SessionsStoreTest {
   userId: UUID;
 

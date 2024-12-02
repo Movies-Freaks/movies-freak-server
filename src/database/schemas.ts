@@ -37,12 +37,12 @@ export type UserPasswordSchema = {
 };
 
 export type UserSchema = StoreSchema & {
-  birthdate: Date,
   email: string,
-  firstLastName: string,
-  name: string,
-  password: UserPasswordSchema,
   username: string,
+  birthdate?: Date,
+  firstLastName?: string,
+  name?: string,
+  password?: UserPasswordSchema,
   secondLastName?: string
 };
 

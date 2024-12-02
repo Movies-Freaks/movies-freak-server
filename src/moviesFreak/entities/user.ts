@@ -1,3 +1,4 @@
+import Crypto from 'crypto';
 import { isEmpty, omit } from 'lodash';
 
 import Entity from './entity';
@@ -19,14 +20,27 @@ export class UserPassword {
   get salt() {
     return this.passwordSalt;
   }
+
+  static encrypt(password: string) {
+    const salt = Crypto
+      .randomBytes(8)
+      .toString('hex');
+
+    const encrypter = Crypto.createHmac('sha512', salt);
+    encrypter.update(password);
+
+    const hash = encrypter.digest('hex');
+
+    return new UserPassword({ hash, salt });
+  }
 }
 
 export default class User extends Entity{
-  birthdate: Date;
   email: string;
-  firstLastName: string;
-  name: string;
   username: string;
+  name?: string;
+  birthdate?: Date;
+  firstLastName?: string;
   secondLastName?: string;
 
   private userPassword: UserPassword;
@@ -46,5 +60,9 @@ export default class User extends Entity{
       hash: this.userPassword.hash,
       salt: this.userPassword.salt
     };
+  }
+
+  addPassword(password: string) {
+    this.userPassword = UserPassword.encrypt(password);
   }
 }

@@ -16,4 +16,12 @@ export default class DateUtils {
       .add(numberOfDays, 'days')
       .toDate();
   }
+
+  static getDateNYearsFromNow(numberOfYears: number) {
+    const date = new Date();
+
+    return dayjs(date)
+      .add(numberOfYears, 'year')
+      .toDate();
+  }
 }

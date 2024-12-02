@@ -1,8 +1,10 @@
-import { Session } from 'moviesFreak/entities';
+import DateUtils from 'jesusx21/dateUtils';
+
+import Constants from 'tests/src/fixtures/constants';
 import SQLTestCase from '../testCase';
 import { Resources } from 'tests/src/fixtures/type';
-import Constants from 'tests/src/fixtures/constants';
-import DateUtils from 'jesusx21/dateUtils';
+
+import { Session, User } from 'moviesFreak/entities';
 import { SessionNotFound, TokenAlreadyUsed, UserNotFound } from 'database/stores/errors';
 import { SQLDatabaseException } from 'database/stores/sql/errors';
 import { UUID } from 'types';
@@ -49,10 +51,13 @@ export class CreateSessionTest extends SessionsStoreTest {
   }
 
   async testThrowErrorWhenUserDoesNotExist() {
-    this.sessionToCreate.userId = this.generateUUID();
+    const session = Session
+      .createForUser({ id: this.generateUUID() } as User)
+      .generateToken()
+      .activateToken();
 
     await this.assertThat(
-      this.database.sessions.create(this.sessionToCreate)
+      this.database.sessions.create(session)
     ).willBeRejectedWith(UserNotFound);
   }
 
