@@ -1,4 +1,5 @@
 // Resources
+import MovieResource from './movie';
 import MoviesResource from './movies';
 import WatchHubsResource from './watchHubs';
 
@@ -13,10 +14,12 @@ export default class MoviesFreakAPI {
   }
 
   buildAPI() {
+    const movieResource = new MovieResource();
     const moviesResource = new MoviesResource();
     const watchHubsResource = new WatchHubsResource();
 
     this.app.registerResource('/movies', moviesResource, [parseQuerySort]);
+    this.app.registerResource('/movies/:movieId', movieResource);
     this.app.registerResource('/watchHubs', watchHubsResource, [parseQuerySort]);
   }
 }

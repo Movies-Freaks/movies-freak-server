@@ -1,6 +1,9 @@
+import { APIError, HTTPStatusCode } from 'jesusx21/boardGame/types';
+
 import APITestCase from '../apiTestCase';
 import watchHubsFixture from 'tests/src/fixtures/watchHubs';
 
+import GetWatchHubs from 'moviesFreak/getWatchHubs';
 import { WatchHub } from 'moviesFreak/entities';
 import { WatchHubList } from 'api/v1/types';
 
@@ -82,6 +85,19 @@ export class GetWatchHubsTest extends APITestCase {
     this.assertThat(result.items[2].name).isEqual('MCU Timeline');
     this.assertThat(result.items[3].name).isEqual('Halloween Marathon');
     this.assertThat(result.items[4].name).isEqual('A Very Christmas List');
+  }
+
+  async testReturnsErrorOnUnexpectedError() {
+    this.mockClass(GetWatchHubs, 'instance')
+      .expects('execute')
+      .throws(new Error('database fails'));
+
+    const result = await this.simulateGet<APIError>({
+      path: '/watchHubs',
+      statusCode: HTTPStatusCode.UNEXPECTED_ERROR
+    });
+
+    this.assertThat(result.code).isEqual('UNEXPECTED_ERROR');
   }
 
   private async loadFixtures() {
