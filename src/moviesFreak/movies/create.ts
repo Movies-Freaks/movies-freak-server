@@ -1,7 +1,7 @@
 import { CouldNotCreateMovie } from './errors';
 import { Database } from 'database';
 import { IMDB, IMDBMovieResult } from 'services/imdb/types';
-import { Movie } from './entities';
+import { Movie } from '../entities';
 import { MovieNotFound } from 'database/stores/errors';
 
 export default class CreateMovie {

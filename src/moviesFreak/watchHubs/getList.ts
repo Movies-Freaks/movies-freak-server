@@ -2,7 +2,7 @@ import { CouldNotGetWatchHubs } from './errors';
 import { Database } from 'database';
 import { Sort } from 'database/stores/types';
 
-export default class GetWatchHubs {
+export default class GetWatchHubList {
   private database: Database;
   private limit: number;
   private skip: number;

@@ -2,8 +2,7 @@ import { HTTPBadInput, HTTPInternalError, Monopoly } from 'jesusx21/boardGame';
 import { HTTPStatusCode, Request, Response } from 'jesusx21/boardGame/types';
 import { isEmpty } from 'lodash';
 
-import CreateMovie from 'moviesFreak/createMovie';
-import GetMovies from 'moviesFreak/getMovies';
+import Movies from 'moviesFreak/movies';
 import Pagination from 'api/pagination';
 import { Database } from 'database';
 import { IMDB } from 'services/imdb/types';
@@ -20,7 +19,7 @@ export default class MoviesResource extends Monopoly {
 
     if (isEmpty(imdbId)) throw new HTTPBadInput('MISSING_IMDB_ID')
 
-    const createMovie = new CreateMovie(database, imdb, imdbId);
+    const createMovie = new Movies.Create(database, imdb, imdbId);
 
     let movie: Movie;
 
@@ -49,7 +48,7 @@ export default class MoviesResource extends Monopoly {
     if (pagination.page < 1) throw new HTTPBadInput('INVALID_PAGE');
     if (pagination.perPage < 1) throw new HTTPBadInput('INVALID_PER_PAGE');
 
-    const getMovies = new GetMovies(
+    const getMovies = new Movies.GetList(
       database,
       pagination.limit,
       pagination.skip,

@@ -2,7 +2,7 @@ import { HTTPStatusCode } from 'jesusx21/boardGame/types';
 
 import APITestCase from '../apiTestCase';
 
-import CreateMovie from 'moviesFreak/createMovie';
+import CreateMovie from 'moviesFreak/movies/create';
 
 export class CreateMovieTest extends APITestCase {
   async testCreateMovie() {

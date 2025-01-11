@@ -1,3 +1,4 @@
+
 import { CouldNotCreateWatchHub } from './errors';
 import { Database } from 'database';
 import { WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';

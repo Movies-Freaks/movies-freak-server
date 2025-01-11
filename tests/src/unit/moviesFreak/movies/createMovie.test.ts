@@ -1,8 +1,8 @@
 import TestCase from 'tests/src/testCase';
 
-import CreateMovie from 'moviesFreak/createMovie';
+import CreateMovie from 'moviesFreak/movies/create';
 import LocalIMDBGateway from 'services/imdb/local';
-import { CouldNotCreateMovie } from 'moviesFreak/errors';
+import { CouldNotCreateMovie } from 'moviesFreak/movies/errors';
 import { Database } from 'database';
 import { Movie } from 'moviesFreak/entities';
 import { IMDBError } from 'services/imdb/errors';

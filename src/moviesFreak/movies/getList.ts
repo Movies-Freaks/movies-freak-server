@@ -2,7 +2,7 @@ import { CouldNotGetMovies } from './errors';
 import { Database } from 'database';
 import { Sort } from 'database/stores/types';
 
-export default class GetMovies {
+export default class GetMovieList {
   private database: Database;
   private limit: number;
   private skip: number;

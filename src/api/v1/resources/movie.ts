@@ -1,10 +1,10 @@
 import { HTTPInternalError, HTTPNotFound, Monopoly } from 'jesusx21/boardGame';
 import { HTTPStatusCode, Request, Response } from 'jesusx21/boardGame/types';
 
-import GetMovieById from 'moviesFreak/getMovieById';
+import Movies from 'moviesFreak/movies';
 import { Database } from 'database';
 import { Movie } from 'moviesFreak/entities';
-import { MovieNotFound } from 'moviesFreak/errors';
+import { MovieNotFound } from 'moviesFreak/movies/errors';
 import { MovieSchema } from 'database/schemas';
 import { UUID } from 'types';
 
@@ -13,7 +13,7 @@ export default class MovieResource extends Monopoly {
     const database: Database = this.getTitle('database');
     const { movieId }: { movieId?: UUID } = request.params ?? {};
 
-    const getMovieById = new GetMovieById(database, movieId);
+    const getMovieById = new Movies.GetById(database, movieId);
 
     let movie: Movie;
 

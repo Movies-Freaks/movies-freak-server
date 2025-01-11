@@ -3,7 +3,7 @@ import { APIError, HTTPStatusCode } from 'jesusx21/boardGame/types';
 import APITestCase from '../apiTestCase';
 import moviesFixture from 'tests/src/fixtures/movies';
 
-import GetMovies from 'moviesFreak/getMovies';
+import GetMovies from 'moviesFreak/movies/getList';
 import { Movie } from 'moviesFreak/entities';
 import { MovieList } from 'api/v1/types';
 

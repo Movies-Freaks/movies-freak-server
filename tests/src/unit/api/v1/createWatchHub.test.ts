@@ -1,6 +1,6 @@
-import { WatchHubPrivacy } from 'moviesFreak/entities';
 import APITestCase from '../apiTestCase';
-import CreateWatchHub from 'moviesFreak/createWatchHub';
+import CreateWatchHub from 'moviesFreak/watchHubs/create';
+import { WatchHubPrivacy } from 'moviesFreak/entities';
 
 export class CreateWatchHubTest extends APITestCase {
   async testCreateWatchHub() {

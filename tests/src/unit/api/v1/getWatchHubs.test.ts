@@ -3,7 +3,7 @@ import { APIError, HTTPStatusCode } from 'jesusx21/boardGame/types';
 import APITestCase from '../apiTestCase';
 import watchHubsFixture from 'tests/src/fixtures/watchHubs';
 
-import GetWatchHubs from 'moviesFreak/getWatchHubs';
+import GetWatchHubs from 'moviesFreak/watchHubs/getList';
 import { WatchHub } from 'moviesFreak/entities';
 import { WatchHubList } from 'api/v1/types';
 

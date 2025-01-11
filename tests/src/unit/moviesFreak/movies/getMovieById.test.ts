@@ -1,8 +1,8 @@
 import moviesFixture from 'tests/src/fixtures/movies';
 import TestCase from 'tests/src/testCase';
 
-import GetMovieById from 'moviesFreak/getMovieById';
-import { CouldNotGetMovie, MovieNotFound } from 'moviesFreak/errors';
+import GetMovieById from 'moviesFreak/movies/getById';
+import { CouldNotGetMovie, MovieNotFound } from 'moviesFreak/movies/errors';
 import { Database } from 'database';
 import { DatabaseError } from 'database/errors';
 import { Movie } from 'moviesFreak/entities';

@@ -1,8 +1,8 @@
 import TestCase from 'tests/src/testCase';
 import watchHubsFixture from 'tests/src/fixtures/watchHubs';
 
-import GetWatchHubs from 'moviesFreak/getWatchHubs';
-import { CouldNotGetWatchHubs } from 'moviesFreak/errors';
+import GetWatchHubs from 'moviesFreak/watchHubs/getList';
+import { CouldNotGetWatchHubs } from 'moviesFreak/watchHubs/errors';
 import { Database } from 'database';
 import { DatabaseError } from 'database/errors';
 import { SortOrder } from 'database/stores/types';

@@ -1,7 +1,7 @@
 import TestCase from 'tests/src/testCase';
 
-import CreateWatchHub from 'moviesFreak/createWatchHub';
-import { CouldNotCreateWatchHub } from 'moviesFreak/errors';
+import CreateWatchHub from 'moviesFreak/watchHubs/create';
+import { CouldNotCreateWatchHub } from 'moviesFreak/watchHubs/errors';
 import { Database } from 'database';
 import { WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
 

@@ -2,8 +2,7 @@ import { HTTPBadInput, HTTPInternalError, Monopoly } from 'jesusx21/boardGame';
 import { HTTPStatusCode, Request, Response } from 'jesusx21/boardGame/types';
 import { isEmpty } from 'lodash';
 
-import CreateWatchHub from 'moviesFreak/createWatchHub';
-import GetWatchHubs from 'moviesFreak/getWatchHubs';
+import WatchHubs from 'moviesFreak/watchHubs';
 import Pagination from 'api/pagination';
 import { Database } from 'database';
 import { Json } from 'types';
@@ -20,7 +19,7 @@ export default class WatchHubsResource extends Monopoly {
 
     if (!VALID_PRIVACIES.includes(privacy)) throw new HTTPBadInput('PRIVACY_NOT_SUPPORTED');
 
-    const createWatchHub = new CreateWatchHub(database, name, privacy, description);
+    const createWatchHub = new WatchHubs.Create(database, name, privacy, description);
 
     let watchHub: WatchHub;
 
@@ -48,7 +47,7 @@ export default class WatchHubsResource extends Monopoly {
     if (pagination.page < 1) throw new HTTPBadInput('INVALID_PAGE');
     if (pagination.perPage < 1) throw new HTTPBadInput('INVALID_PER_PAGE');
 
-    const getWatchHubs = new GetWatchHubs(
+    const getWatchHubs = new WatchHubs.GetList(
       database,
       pagination.limit,
       pagination.skip,
