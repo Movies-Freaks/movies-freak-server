@@ -63,6 +63,7 @@ export type EndpointParams = {
 export type Middleware = (req: Request, app: any, resourceInstance: any) => void | Promise<void>;
 
 export type Request = {
+  headers: Json,
   body: Json;
   params: Json;
   query: Json;

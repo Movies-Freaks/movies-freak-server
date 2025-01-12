@@ -27,4 +27,19 @@ export default class MemorySessionsStore extends AbstractMemoryStore<Session> {
       throw error;
     }
   }
+
+  async findActiveSessionByToken(token: string): Promise<Session> {
+    try {
+      return await this.findOne({
+        token,
+        isActive: true
+      });
+    } catch (error: any) {
+      if (error instanceof NotFound) {
+        throw new SessionNotFound({ token });
+      }
+
+      throw error;
+    }
+  }
 }

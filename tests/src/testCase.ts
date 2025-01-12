@@ -95,6 +95,14 @@ export default class TestCase extends ClasspuccinoTestCase {
     delete this.sandbox;
   }
 
+  spyFunction(target: any, functionName: string) {
+    if (!this.sandbox) {
+      throw new SandboxNotInitialized();
+    }
+
+    return this.sandbox.spy(target, functionName);
+  }
+
   stubFunction(target: any, functionName: string) {
     if (!this.sandbox) {
       throw new SandboxNotInitialized();
@@ -103,8 +111,9 @@ export default class TestCase extends ClasspuccinoTestCase {
     return this.sandbox.stub(target, functionName);
   }
 
-  loadFixture<T = Entity>(resource?: Resources): Promise<T[]> {
-    const database = this.getDatabase();
+  loadFixture<T = Entity>(resource?: Resources, database?: Database): Promise<T[]> {
+    database ??= this.getDatabase();
+
     const fixtures = new Fixtures(database);
 
     return fixtures.load(resource) as any;
