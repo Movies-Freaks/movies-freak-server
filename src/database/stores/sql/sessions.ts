@@ -35,6 +35,13 @@ export default class SQLSessionsStore extends AbstractSQLStore<SessionSchema> {
     return this.findOne({ id: sessionId });
   }
 
+  findActiveSessionByToken(token: string): Promise<Session> {
+    return this.findOne({
+      token,
+      is_active: false
+    });
+  }
+
   protected async find(query: Json): Promise<Session[]> {
     let items: Json[];
 

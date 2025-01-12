@@ -80,7 +80,7 @@ class Assertions {
     );
   }
 
-  async willBeRejectedWith(errorKlass: Function) {
+  async willBeRejectedWith<T = Error>(errorKlass: Function): Promise<T> {
     try {
       await this.actual;
 
@@ -93,7 +93,7 @@ class Assertions {
       }
 
       if (error instanceof errorKlass) {
-        return error;
+        return error as T;
       }
 
       if (error instanceof AssertionError) {

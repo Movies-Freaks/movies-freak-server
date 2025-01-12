@@ -20,20 +20,6 @@ class SQLSessionsStore {
     this.database = database;
   }
 
-  findActiveByUserId(userId: UUID) {
-    return this.findOne({
-      is_active: true,
-      user_id: userId
-    });
-  }
-
-  findCurrentSessionByToken(token: string) {
-    return this.findOne({
-      token,
-      is_active: true,
-    })
-  }
-
   async update(session: Session) {
     const data = this.serialize(session);
 
@@ -53,25 +39,6 @@ class SQLSessionsStore {
 
     if (!result) {
       throw new SessionNotFound({ id: session.id });
-    }
-
-    return this.deserialize(result);
-  }
-
-  private async findOne(query: {}) {
-    let result: sessionRecord;
-
-    try {
-      result = await this.connection('sessions')
-        .where(query)
-        .orderBy('created_at', 'desc')
-        .first();
-    } catch (error: any) {
-      throw new SQLDatabaseException(error);
-    }
-
-    if (!result) {
-      throw new SessionNotFound(query);
     }
 
     return this.deserialize(result);

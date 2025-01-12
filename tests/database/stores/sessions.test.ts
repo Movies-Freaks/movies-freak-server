@@ -56,56 +56,6 @@ class SessionsStoreTest extends SQLTestCase {
   }
 }
 
-export class FindActiveSessionByUserIdTest extends SessionsStoreTest {
-  userId: UUID;
-
-  constructor() {
-    super();
-
-    this.userId = this.generateUUID();
-  }
-
-  async setUp() {
-    await super.setUp();
-
-    this.userId = this.user?.id || this.generateUUID();
-  }
-
-  async testFindActiveByUserId() {
-    const user = await this.getUser();
-    const sessionActived = await this.createSession(this.getDatabase(), user);
-
-    await this.createSessions(user, { quantity: 5 });
-
-    const sessionFound = await this.getDatabase()
-      .sessions
-      .findActiveByUserId(this.userId);
-
-    this.assertThat(sessionFound).isInstanceOf(Session);
-    this.assertThat(sessionFound.id).isEqual(sessionActived.id);
-    this.assertThat(sessionFound.isActive()).isTrue();
-  }
-
-  async testThrowsErrorWhenUserHasNotActriveSessions() {
-    await this.assertThat(
-      this.getDatabase()
-        .sessions
-        .findActiveByUserId(this.userId)
-    ).willBeRejectedWith(SessionNotFound);
-  }
-
-  async testThrowsErrorOnUnexpectedError() {
-    this.stubFunction(this.getDatabase().sessions, 'connection')
-      .throws(new Error());
-
-    await this.assertThat(
-      this.getDatabase()
-        .sessions
-        .findActiveByUserId(this.userId)
-    ).willBeRejectedWith(SQLDatabaseException);
-  }
-}
-
 export class UpdateSessionTest extends SessionsStoreTest {
   async testUpdateTokenGenerated() {
     const session = this.sessions[1];

@@ -17,7 +17,7 @@ export default abstract class AbstractMemoryStore<T> extends AbstractStore<T> {
 
   async create(entity: T): Promise<T> {
     const entityToSave = cloneDeep(entity);
-    const entityId = uuid();
+    const entityId = get(entity, 'id', uuid());
 
     Object.assign(
       entityToSave,
