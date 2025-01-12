@@ -4,9 +4,9 @@ import { HTTPStatusCode } from 'jesusx21/boardGame/types';
 import TestCase from 'tests/src/testCase';
 
 import config from 'config';
-import getDatabase, { Database } from 'database';
 import imdbFactory from 'services/imdb/factory';
 import MoviesFreakApp from 'api';
+import { Database } from 'database';
 import { IMDB } from 'services/imdb/types';
 import { Json } from 'types';
 
@@ -44,10 +44,16 @@ export default class APITestCase extends TestCase {
   setUp() {
     super.setUp();
 
-    this.database = getDatabase(config.database.driver);
+    this.database = this.getDatabase(config.database.driver);
     this.imdb = imdbFactory(config.imdb);
 
     this.buildTestApp(this.database, this.imdb);
+  }
+
+  tearDown() {
+    super.tearDown();
+
+    this.removeDatabase();
   }
 
   async simulatePost(params: PostRequestParams): Promise<Json> {

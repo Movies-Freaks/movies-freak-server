@@ -1,9 +1,12 @@
 import knex, { Knex } from 'knex';
-import knexCleaner from 'knex-cleaner';
+import knexCleaner, { KnexCleanerOptions } from 'knex-cleaner';
 
+import TestCase from '../testCase';
+
+import config from 'config';
 import knexConfig from '../../../knexfile';
 import SQLDatabase from 'database/stores/sql';
-import TestCase from '../testCase';
+import { Database } from 'database';
 import { Env } from 'config/types';
 
 export default class SQLTestCase extends TestCase {
@@ -24,11 +27,19 @@ export default class SQLTestCase extends TestCase {
   }
 
   async cleanDatabase() {
-    if (!this.connection) {
-      return;
-    }
+    if (!config.isTestingEnv) return;
+    if (!this.connection) return;
 
-    await knexCleaner.clean(this.connection as any);
+    const knexCleanerConfig: KnexCleanerOptions = {
+      mode: 'delete',
+      ignoreTables: [
+        'knex_migrations',
+        'knex_migrations_lock',
+        'knex_migrations_id_seq',
+      ]
+    };
+
+    await knexCleaner.clean(this.connection, knexCleanerConfig);
     this.connection.destroy();
 
     this.connection = undefined;
@@ -43,6 +54,10 @@ export default class SQLTestCase extends TestCase {
     this.buildDatabaseConnection();
     this.database = new SQLDatabase(this.connection);
 
+    return this.database;
+  }
+
+  getDatabase(): Database {
     return this.database;
   }
 

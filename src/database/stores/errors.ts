@@ -13,19 +13,25 @@ export class InvalidData extends DatabaseError {
   }
 }
 
+export class EmailAlreadyExists extends InvalidData {
+  constructor(username: string) {
+    super({ username });
+  }
+}
+
 export class IMDBIdAlreadyExists extends InvalidData {
   constructor(imdbId: string) {
     super({ imdbId });
   }
 }
 
-export class UsernameAlreadyExists extends InvalidData {
-  constructor(username: string) {
-    super({ username });
+export class TokenAlreadyUsed extends InvalidData {
+  constructor(token: string) {
+    super({ token });
   }
 }
 
-export class EmailAlreadyExists extends InvalidData {
+export class UsernameAlreadyExists extends InvalidData {
   constructor(username: string) {
     super({ username });
   }
@@ -41,5 +47,6 @@ export class NotFound extends DatabaseError {
 }
 
 export class MovieNotFound extends NotFound {}
+export class SessionNotFound extends NotFound {}
 export class UserNotFound extends NotFound {}
 export class WatchHubNotFound extends NotFound {}

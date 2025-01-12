@@ -1,7 +1,7 @@
 import Serializer, { SerializerError } from 'jesusx21/serializer';
 
 import SQLTestCase from '../testCase';
-import { Fixtures, Resources } from 'tests/src/fixtures/type';
+import { Resources } from 'tests/src/fixtures/type';
 
 import { EmailAlreadyExists, UsernameAlreadyExists, UserNotFound } from 'database/stores/errors';
 import { SQLDatabaseException } from 'database/stores/sql/errors';
@@ -9,12 +9,12 @@ import { User } from 'moviesFreak/entities';
 import { UUID } from 'types';
 
 class UsersStoreTest extends SQLTestCase {
-  protected fixtures: Fixtures;
+  protected users: User[];
 
   async setUp() {
     super.setUp();
 
-    this.fixtures = await this.loadFixtures(this.database, Resources.USERS);
+    this.users = await this.loadFixture<User>(Resources.USERS);
   }
 }
 
@@ -102,7 +102,7 @@ export class FindByIdTest extends UsersStoreTest {
   async setUp() {
     await super.setUp();
 
-    this.userId = this.fixtures.users[1].id;
+    this.userId = this.users[1].id;
   }
 
   async testFindUserById() {

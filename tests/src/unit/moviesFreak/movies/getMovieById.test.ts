@@ -16,8 +16,12 @@ export class GetMovieByIdTest extends TestCase {
     super.setUp();
     this.database = this.getDatabase();
 
-    const { movies } = await this.loadFixtures(this.database, Resources.MOVIES);
+    const movies = await this.loadFixture(Resources.MOVIES);
     this.movieId = movies[1].id;
+  }
+
+  tearDown() {
+    this.removeDatabase();
   }
 
   async testReturnMovieByItsId() {

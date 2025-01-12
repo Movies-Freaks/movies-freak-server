@@ -1,10 +1,8 @@
 import { get, isArray, isPlainObject, set, snakeCase } from 'lodash';
 
-import { Json } from 'types';
-
-export function snakeObject(value: Json | Json[]): Json | Json[]  {
-  return formatToSnake(value);
-}
+export type Json = {
+  [key: string]: any
+};
 
 const formatToSnake = (value: string | Json | any[]): any => {
   if (isPlainObject(value)) {
@@ -20,4 +18,8 @@ const formatToSnake = (value: string | Json | any[]): any => {
   if (isArray(value)) return value.map(formatToSnake);
 
   return value;
+};
+
+export function snakeObject(value: Json | Json[]): Json | Json[]  {
+  return formatToSnake(value);
 }

@@ -16,8 +16,11 @@ export class GetMoviesTest extends TestCase {
     super.setUp();
     this.database = this.getDatabase();
 
-    const fixtures = await this.loadFixtures(this.database, Resources.MOVIES);
-    this.movies = fixtures.movies;
+    this.movies = await this.loadFixture(Resources.MOVIES);
+  }
+
+  tearDown() {
+    this.removeDatabase();
   }
 
   async testReturnPaginatedMovies() {

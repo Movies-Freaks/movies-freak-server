@@ -13,8 +13,7 @@ export class GetWatchHubsTest extends APITestCase {
   async setUp() {
     super.setUp();
 
-    const fixtures = await this.loadFixtures(this.database, Resources.WATCH_HUBS);
-    this.watchHubs = fixtures.watchHubs;
+    this.watchHubs = await this.loadFixture(Resources.WATCH_HUBS);
   }
 
   async testGetWatchHubsWithoutSendingPagination() {

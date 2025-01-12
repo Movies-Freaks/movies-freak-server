@@ -1,5 +1,8 @@
+import Constants from './constants';
+
 const usersFixture = [
   {
+    id: Constants.USER_1,
     name: 'Hermione',
     username: 'smart_witch',
     firstLastName: 'Granger',
@@ -11,6 +14,7 @@ const usersFixture = [
     }
   },
   {
+    id: Constants.USER_2,
     name: 'Albus Severus',
     username: 'albus',
     firstLastName: 'Potter',
@@ -23,6 +27,7 @@ const usersFixture = [
     }
   },
   {
+    id: Constants.USER_3,
     name: 'Cedric',
     username: 'cedric',
     firstLastName: 'Diggory',
@@ -34,6 +39,7 @@ const usersFixture = [
     }
   },
   {
+    id: Constants.USER_4,
     name: 'Newton Artemis',
     username: 'newt',
     firstLastName: 'Fido',
@@ -46,6 +52,7 @@ const usersFixture = [
     }
   },
   {
+    id: Constants.USER_5,
     name: 'Narcisa',
     username: 'narcisa',
     firstLastName: 'Black',

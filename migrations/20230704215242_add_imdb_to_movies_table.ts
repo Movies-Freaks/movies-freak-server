@@ -1,8 +1,6 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.up = function (knex) {
+import { Knex } from 'knex';
+
+export async function up(knex: Knex): Promise<void> {
   return knex.schema.alterTable('movies', (table) => {
     table.string('imdb_id').unique();
     table.string('title');
@@ -17,13 +15,9 @@ exports.up = function (knex) {
     table.string('imdb_rating');
     table.string('production');
   });
-};
+}
 
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.down = function (knex) {
+export async function down(knex: Knex): Promise<void> {
   return knex.schema.alterTable('movies', (table) => {
     table.dropColumn('imdb_id');
     table.dropColumn('title');
@@ -37,4 +31,4 @@ exports.down = function (knex) {
     table.dropColumn('imdb_rating');
     table.dropColumn('production');
   });
-};
+}

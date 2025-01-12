@@ -10,10 +10,6 @@ class InMemorySessionsStore {
     this.store = new Store<Session>();
   }
 
-  create(session: Session) {
-    return this.store.create(session);
-  }
-
   async findActiveByUserId(userId: UUID) {
     try {
       return await this.store.findOne({ 'user.id': userId });

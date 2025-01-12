@@ -24,6 +24,13 @@ export type MovieSchema = StoreSchema & {
   year: string
 };
 
+export type SessionSchema = StoreSchema & {
+  userId: UUID,
+  token: string,
+  expiresAt: Date,
+  isActive: boolean
+};
+
 export type UserPasswordSchema = {
   hash: string,
   salt: string

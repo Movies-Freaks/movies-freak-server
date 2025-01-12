@@ -30,8 +30,8 @@ export default class SQLUsersStore extends AbstractSQLStore<User> {
     return this.deserialize(result);
   }
 
-  findById(watchHubId: UUID): Promise<User> {
-    return this.findOne({ id: watchHubId });
+  findById(userId: UUID): Promise<User> {
+    return this.findOne({ id: userId });
   }
 
   protected async find(query: Json): Promise<User[]> {

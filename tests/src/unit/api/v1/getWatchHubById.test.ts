@@ -13,7 +13,7 @@ export class GetWatchHubByIdTest extends APITestCase {
   async setUp() {
     super.setUp();
 
-    const { watchHubs } = await this.loadFixtures(this.database, Resources.WATCH_HUBS);
+    const watchHubs = await this.loadFixture(Resources.WATCH_HUBS);
     this.watchHubId = watchHubs[1].id;
   }
 

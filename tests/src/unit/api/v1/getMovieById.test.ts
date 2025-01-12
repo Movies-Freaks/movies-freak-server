@@ -6,6 +6,7 @@ import { Resources } from 'tests/src/fixtures/type';
 import GetMovieById from 'moviesFreak/movies/getById';
 import { MovieSchema } from 'database/schemas';
 import { UUID } from 'types';
+import { Movie } from 'moviesFreak/entities';
 
 export class GetMovieByIdTest extends APITestCase {
   protected movieId: UUID;
@@ -13,7 +14,7 @@ export class GetMovieByIdTest extends APITestCase {
   async setUp() {
     super.setUp();
 
-    const { movies } = await this.loadFixtures(this.database, Resources.MOVIES);
+    const movies = await this.loadFixture<Movie>(Resources.MOVIES);
     this.movieId = movies[2].id;
   }
 

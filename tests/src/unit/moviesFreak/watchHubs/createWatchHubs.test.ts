@@ -21,6 +21,10 @@ export default class CreateWatchHubTest extends TestCase {
     );
   }
 
+  tearDown() {
+    this.removeDatabase();
+  }
+
   async testCreateWatchHub() {
     const watchHub = await this.createWatchHub.execute();
 

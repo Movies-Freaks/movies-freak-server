@@ -1,22 +1,26 @@
 import sinon from 'sinon';
+import { isNil } from 'lodash';
+import { TestCase as ClasspuccinoTestCase } from 'jesusx21/classpuccino';
 import { v4 as uuid } from 'uuid';
 
-import { TestCase as ClasspuccinoTestCase } from 'jesusx21/classpuccino';
+import Fixtures from './fixtures';
+import { Resources } from './fixtures/type';
 
 import getDatabase, { Database } from 'database';
+import Entity from 'moviesFreak/entities/entity';
 import { Class, UUID } from 'types';
 import { DatabaseDriver } from 'config/types';
-import { Resources } from './fixtures/type';
-import generateFixtures from './fixtures';
 
 class SandboxNotInitialized extends Error {
   get name() {
     return 'SandboxNotInitialized';
   }
 }
+
  // TODO: VALIDATE ENV FILE EXISTENCE
 export default class TestCase extends ClasspuccinoTestCase {
   private sandbox?: sinon.SinonSandbox;
+  protected database?: Database;
 
   setUp() {
     this.createSandbox();
@@ -40,8 +44,16 @@ export default class TestCase extends ClasspuccinoTestCase {
     return uuid();
   }
 
-  getDatabase(): Database {
-    return getDatabase(DatabaseDriver.MEMORY);
+  getDatabase(driver?: DatabaseDriver) {
+    if (isNil(this.database)) {
+      this.database = getDatabase(driver ?? DatabaseDriver.MEMORY);
+    }
+
+    return this.database;
+  }
+
+  removeDatabase() {
+    this.database = undefined;
   }
 
   mockClass(klass: Class, functionType = 'instance') {
@@ -91,7 +103,10 @@ export default class TestCase extends ClasspuccinoTestCase {
     return this.sandbox.stub(target, functionName);
   }
 
-  loadFixtures(database: Database, resource?: Resources) {
-    return generateFixtures(database, resource);
+  loadFixture<T = Entity>(resource?: Resources): Promise<T[]> {
+    const database = this.getDatabase();
+    const fixtures = new Fixtures(database);
+
+    return fixtures.load(resource) as any;
   }
 }

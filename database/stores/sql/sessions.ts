@@ -20,23 +20,6 @@ class SQLSessionsStore {
     this.database = database;
   }
 
-  async create(session: Session) {
-    const dataToInsert: Json = this.serialize(session);
-
-    let result: sessionRecord;
-
-    try {
-      [result] = await this.connection('sessions')
-      .returning('*')
-      .insert(dataToInsert)
-
-    } catch (error: any) {
-      throw new SQLDatabaseException(error);
-    }
-
-    return this.deserialize(result);
-  }
-
   findActiveByUserId(userId: UUID) {
     return this.findOne({
       is_active: true,

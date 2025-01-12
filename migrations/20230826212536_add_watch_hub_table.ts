@@ -1,14 +1,16 @@
-exports.up = function (knex) {
+import { Knex } from 'knex';
+
+export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('watch_hubs', (table) => {
     table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
-    table.string('name').notNull();
+    table.string('name').notNullable();
     table.string('description');
-    table.text('privacy').notNull();
+    table.text('privacy').notNullable();
 
     table.timestamps(true, true);
   });
-};
+}
 
-exports.down = function (knex) {
+export async function down(knex: Knex): Promise<void> {
   return knex.schema.dropTable('watch_hubs');
-};
+}

@@ -13,8 +13,7 @@ export class GetMoviesTest extends APITestCase {
   async setUp() {
     super.setUp();
 
-    const fixtures = await this.loadFixtures(this.database, Resources.MOVIES);
-    this.movies = fixtures.movies;
+    this.movies= await this.loadFixture<Movie>(Resources.MOVIES);
   }
 
   async testGetMoviesWithoutSendingPagination() {

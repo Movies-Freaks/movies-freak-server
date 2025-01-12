@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-import sinon from 'sinon';
 import { isEmpty, omit } from 'lodash';
 
 import buildFixtureGenerator from './fixtures';
@@ -9,7 +8,6 @@ import {
 import FixturesGenerator from './fixtures/generator';
 import { Json } from '../types/common';
 import {
-  Film,
   TVSerie,
   TVSeason,
   TVEpisode,
@@ -18,7 +16,6 @@ import {
   User
 } from '../app/moviesFreak/entities';
 import {
-  FilmEntity,
   TVEpisodeEntity,
   TVSeasonEntity,
   TVSerieEntity,
@@ -26,13 +23,11 @@ import {
 } from '../types/entities';
 import { Database } from '../types/database';
 import {
-  FilmFixture,
   TVEpisodeFixture,
   TVSerieFixture,
   UserFixture
 } from './fixtures/types';
 import { FixtureGeneratorRecipe } from './fixtures/generator/types';
-
 
 class TestCase extends ClasspuccinoTestCase {
   private fixturesGenerator: FixturesGenerator;
@@ -57,68 +52,6 @@ class TestCase extends ClasspuccinoTestCase {
     user.addPassword(password);
 
     return database.users.create(user);
-  }
-
-  async createUsers(database: Database, ...args: any[]) {
-    const options = this.getFixturesGeneratorOptions(...args);
-    const fixtures = await this.generateFixtures<UserFixture>({
-      type: 'user',
-      ...options
-    });
-
-    const result: User[] = [];
-
-    // For is use instead of map to make sure the creation respects the index order
-    // eslint-disable-next-line no-restricted-syntax
-    for (const userData of fixtures) {
-      const user = new User(
-        this.ensureUserParams(userData)
-      );
-
-      user.addPassword('password')
-
-      // eslint-disable-next-line no-await-in-loop
-      const userSaved = await database.users.create(user);
-
-      result.push(userSaved);
-    }
-
-    return result;
-  }
-
-  async createFilm(database: Database, data?: FilmFixture) {
-    const recipe = data ? [data] : [];
-    const [filmData] = await this.generateFixtures<FilmEntity>({
-      recipe,
-      type: 'film'
-    });
-    const film = new Film(filmData);
-
-    return database.films.create(film);
-  }
-
-  async createFilms(database: Database, ...args: any[]) {
-    const options = this.getFixturesGeneratorOptions(...args);
-    const fixtures = await this.generateFixtures<FilmEntity>({
-      type: 'film',
-      ...options
-    });
-
-    const result: Film[] = [];
-
-    // For is use instead of map to make sure the creation respects the index order
-    // eslint-disable-next-line no-restricted-syntax
-    for (const filmData of fixtures) {
-      const film = new Film(
-        omit(filmData, ['id', 'createdAt', 'updatedAt'])
-      );
-      const filmSaved = await database.films.create(film);
-
-      // eslint-disable-next-line no-await-in-loop
-      result.push(filmSaved);
-    }
-
-    return result;
   }
 
   async createTVSerie(database: Database, data?: TVSerieFixture) {

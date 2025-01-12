@@ -24,6 +24,10 @@ export class CreateMovieTest extends TestCase {
     this.createMovie = new CreateMovie(this.database, this.imdb, IMDB_ID);
   }
 
+  tearDown() {
+    this.removeDatabase();
+  }
+
   async testCreateMovie() {
     const movie = await this.createMovie.execute();
 

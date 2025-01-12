@@ -16,8 +16,11 @@ export class GetWatchHubsTest extends TestCase {
     super.setUp();
     this.database = this.getDatabase();
 
-    const fixtures = await this.loadFixtures(this.database, Resources.WATCH_HUBS);
-    this.watchHubs = fixtures.watchHubs;
+    this.watchHubs = await this.loadFixture(Resources.WATCH_HUBS);
+  }
+
+  tearDown() {
+    this.removeDatabase();
   }
 
   async testReturnPaginatedWatchHubs() {

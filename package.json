@@ -27,6 +27,7 @@
     "axios": "^1.7.7",
     "clone-deep": "^4.0.1",
     "cors": "^2.8.5",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "express-async-errors": "^3.1.1",
     "express-winston": "^4.2.0",
@@ -63,9 +64,9 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.2",
+    "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.1.0",
-    "webpack-node-externals": "^3.0.0",
-    "webpack": "^5.95.0"
+    "webpack-node-externals": "^3.0.0"
   }
 }
