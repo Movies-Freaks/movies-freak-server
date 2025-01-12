@@ -56,7 +56,7 @@ export default class APITestCase extends TestCase {
     this.removeDatabase();
   }
 
-  async simulatePost(params: PostRequestParams): Promise<Json> {
+  async simulatePost<T = Json>(params: PostRequestParams): Promise<T> {
     const {
       payload = {},
       statusCode = 201,
@@ -70,7 +70,7 @@ export default class APITestCase extends TestCase {
     return body;
   }
 
-  async simulateGet<T>(params: GetRequestParams): Promise<T> {
+  async simulateGet<T = Json>(params: GetRequestParams): Promise<T> {
     const {
       query = {},
       statusCode = 200,
