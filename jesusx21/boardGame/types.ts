@@ -50,13 +50,13 @@ export type BoardGameErrorParams = {
   info?: Json,
 };
 
-export type Endpoint = {
-  [resource: string]: EndpointParams[];
+export type Endpoint<T> = {
+  [resource: string]: EndpointParams<T>[];
 };
 
-export type EndpointParams = {
+export type EndpointParams<T> = {
   path: string,
-  resourceInstance: any,
+  resourceInstance: T,
   middlewares: Function[]
 };
 

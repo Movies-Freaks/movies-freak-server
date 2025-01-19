@@ -68,7 +68,7 @@ export class HTTPConflict extends HTTPError {
 }
 
 export class HTTPInternalError extends HTTPError {
-  constructor(error: Error) {
+  constructor(error?: Error) {
     super(HTTPStatusCode.UNEXPECTED_ERROR, ErrorCodes.UNEXPECTED_ERROR, error);
   }
 }

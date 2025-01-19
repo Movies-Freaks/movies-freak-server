@@ -9,15 +9,16 @@ import {
 const user = JSON(
   {
     id: UUID,
-    name: STRING({ min: 5, max: 20 }),
-    username: STRING({ min: 3, max: 15 }),
-    lastName: STRING({ min: 5, max: 20 }),
-    email: EMAIL,
     birthdate: DATETIME,
+    email: EMAIL,
+    firstLastName: STRING({ min: 5, max: 20 }),
+    name: STRING({ min: 5, max: 60 }),
+    secondLastName: STRING({ min: 5, max: 20 }),
+    username: STRING({ min: 3, max: 15 }),
     createdAt: DATETIME,
     updatedAt: DATETIME
   },
-  ['id', 'name', 'lastName', 'username', 'email']
+  ['id', 'name', 'firstLastName', 'username', 'email']
 );
 
 export default user;

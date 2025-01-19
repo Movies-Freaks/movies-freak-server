@@ -47,7 +47,7 @@ export default abstract class BoardGame {
   protected logger: any;
   protected expressLogger: any;
 
-  private endpoints: Endpoint;
+  private endpoints: Endpoint<Monopoly>;
 
   constructor(host?: string, port?: number) {
     this.host = host ?? 'localhost';
@@ -57,6 +57,7 @@ export default abstract class BoardGame {
     this.router = express.Router();
 
     this.endpoints = {};
+    this.dependencies = {};
 
     this.setEndpointBase();
 
@@ -69,9 +70,19 @@ export default abstract class BoardGame {
     this.logger = loggers.logger;
     this.expressLogger = loggers.expressLogger;
 
-    this.app.use(express.json());
-    this.app.use(express.static(`${os.tmpdir()}`));
-    this.app.use(this.endpointBase, this.router);
+    this.add(express.json());
+    this.add(express.static(`${os.tmpdir()}`));
+    this.add(this.endpointBase, this.router);
+  }
+
+  add(fn: any, ...args: any[]) {
+    this.app.use(fn, ...args);
+  }
+
+  addDependency<T>(dependencyName: string, dependency: T): this {
+    this.dependencies[dependencyName] = dependency;
+
+    return this;
   }
 
   registerResource(
@@ -114,13 +125,13 @@ export default abstract class BoardGame {
   }
 
   protected addCORSMiddleware() {
-    this.app.use(cors());
+    this.add(cors());
 
     return this;
   }
 
   protected addRequestLogger(format: string) {
-    this.app.use(morgan(format));
+    this.add(morgan(format));
 
     return this;
   }
@@ -137,13 +148,13 @@ export default abstract class BoardGame {
       next();
     };
 
-    this.app.use(headersMiddleware);
+    this.add(headersMiddleware);
 
     return this;
   }
 
   protected setLogger() {
-    this.app.use(this.expressLogger);
+    this.add(this.expressLogger);
 
     return this;
   }
@@ -160,7 +171,7 @@ export default abstract class BoardGame {
       next();
     }
 
-    this.app.use(handleError);
+    this.add(handleError);
   }
 
   protected buildEndpoints() {
@@ -170,6 +181,13 @@ export default abstract class BoardGame {
         const endpoints = this.endpoints[resource];
 
         endpoints.forEach((endpoint) => {
+          endpoint
+            .resourceInstance
+            .setTitles({
+              logger: this.logger,
+              ...this.dependencies
+            });
+
           RESOURCE_EVENTS_SUPPORTED.forEach((eventName) => {
             const verb = eventName.substring(2).toLowerCase() as Verb;
 
@@ -198,7 +216,7 @@ export default abstract class BoardGame {
               .map((middleware) => {
                 return async (req: Request, res: ExpressResponse, next: NextFunction) => {
                   try {
-                    await middleware(req, this, endpoint.resourceInstance);
+                    await middleware(req, endpoint.resourceInstance);
                   } catch(error: any) {
                     if (error instanceof HTTPError) {
                       return res.status(error.statusCode).send(error.payload);
@@ -235,11 +253,6 @@ export default abstract class BoardGame {
 
   private buildController(resource: Monopoly, tokenName: Tokens) {
     return async (req: Request, res: ExpressResponse) => {
-      resource.setTitles({
-        logger: this.logger,
-        ...this.dependencies
-      });
-
       let moveToken: Function;
 
       switch(tokenName) {

@@ -37,7 +37,7 @@ export class GetMovieByIdTest extends TestCase {
   async testThrowErrorWhenMovieIsNotFound() {
     const getMovieById = new GetMovieById(this.database, this.generateUUID());
 
-    this.assertThat(
+    await this.assertThat(
       getMovieById.execute()
     ).willBeRejectedWith(MovieNotFound);
   }

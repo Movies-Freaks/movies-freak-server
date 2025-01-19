@@ -11,7 +11,8 @@ export default class MoviesFreakApp extends BoardGame {
   }
 
   initialize(database: Database, imdb: IMDB) {
-    this.dependencies = { database, imdb };
+    this.addDependency<Database>('database', database)
+      .addDependency<IMDB>('imdb', imdb);
 
     this.addCORSMiddleware()
       .setHeaders({

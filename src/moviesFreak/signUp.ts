@@ -4,24 +4,12 @@ import { EmailAlreadyExists, UsernameAlreadyExists } from 'database/stores/error
 import { Session, User } from './entities';
 
 export default class SignUp {
-  private database: Database;
-
-  private email: string;
-  private username: string;
-  private password: string;
-
   constructor(
-    database: Database,
-    email: string,
-    username: string,
-    password: string
-  ) {
-    this.database = database;
-
-    this.email = email;
-    this.username = username;
-    this.password = password;
-  }
+    private database: Database,
+    private email: string,
+    private username: string,
+    private password: string
+  ) {}
 
   async execute() {
     let user: User;

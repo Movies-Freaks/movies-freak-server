@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { HTTPStatusCode } from 'jesusx21/boardGame/types';
+import { isNil } from 'lodash';
 
 import TestCase from 'tests/src/testCase';
 
@@ -22,9 +23,10 @@ enum RequestVerb {
 };
 
 type RequestParams = {
-  path: string;
-  authorization?: string;
-  statusCode?: HTTPStatusCode;
+  path: string,
+  authorization?: string,
+  statusCode?: HTTPStatusCode,
+  token?: string
 };
 
 type PostRequestParams = RequestParams & {
@@ -72,14 +74,20 @@ export default class APITestCase extends TestCase {
 
   async simulateGet<T = Json>(params: GetRequestParams): Promise<T> {
     const {
+      token,
       query = {},
       statusCode = 200,
       ...requestParams
     } = params;
 
-    const { body } = await this.initRequest(RequestVerb.GET, requestParams)
-      .query(query)
-      .expect(statusCode);
+    let request = this.initRequest(RequestVerb.GET, requestParams)
+      .query(query);
+
+    if (!isNil(token)) {
+      request = request.set('Authorization', `Bearer ${token}`)
+    }
+
+    const { body } = await request.expect(statusCode);
 
     return body;
   }
