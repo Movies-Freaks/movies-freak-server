@@ -25,6 +25,8 @@ export class CreateMovieTest extends TestCase {
   }
 
   tearDown() {
+    super.tearDown();
+
     this.removeDatabase();
   }
 

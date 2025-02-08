@@ -21,6 +21,7 @@ export class GetMovieByIdTest extends TestCase {
   }
 
   tearDown() {
+    super.tearDown();
     this.removeDatabase();
   }
 

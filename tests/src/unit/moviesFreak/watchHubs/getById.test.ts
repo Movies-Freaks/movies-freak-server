@@ -22,6 +22,7 @@ export default class GetWatchHubByIdTest extends TestCase {
   }
 
   tearDown() {
+    super.tearDown();
     this.removeDatabase();
   }
 

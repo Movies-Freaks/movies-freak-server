@@ -11,7 +11,7 @@ export class SignUpTest extends TestCase {
   private signUp: SignUp;
 
   async setUp() {
-    this.createSandbox();
+    super.setUp();
 
     this.database = this.getDatabase();
     this.signUp = new SignUp(
@@ -23,8 +23,8 @@ export class SignUpTest extends TestCase {
   }
 
   tearDown() {
+    super.tearDown();
     this.removeDatabase();
-    this.restoreSandbox();
   }
 
   async testSignUpReturnsASession() {

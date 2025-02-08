@@ -20,6 +20,7 @@ export class GetWatchHubsTest extends TestCase {
   }
 
   tearDown() {
+    super.tearDown();
     this.removeDatabase();
   }
 

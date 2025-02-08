@@ -11,6 +11,8 @@ export class SessionTest extends TestCase {
   private user: User;
 
   setUp() {
+    super.setUp();
+
     const [userData] = usersFixture;
 
     this.user = new User(userData);

@@ -2,9 +2,9 @@ import { APIError } from 'jesusx21/boardGame/types';
 
 import APITestCase from '../apiTestCase';
 
+import SignUp from 'moviesFreak/signUp';
 import { Json } from 'types';
 import { SessionSchema } from 'database/schemas';
-import SignUp from 'moviesFreak/signUp';
 
 export class SignUpTest extends APITestCase {
   private userData: Json;
@@ -12,7 +12,6 @@ export class SignUpTest extends APITestCase {
   setUp() {
     super.setUp();
 
-    this.createSandbox();
     this.userData = {
       email: 'evan@gmail.com',
       username: 'evan',
@@ -20,9 +19,8 @@ export class SignUpTest extends APITestCase {
     };
   }
 
-  tearDown(): void {
-    this.removeDatabase();
-    this.restoreSandbox();
+  tearDown() {
+    super.tearDown();
   }
 
   async testSignUpUser() {

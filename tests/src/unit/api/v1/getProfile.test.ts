@@ -13,17 +13,11 @@ export class GetProfileTest extends APITestCase {
 
   async setUp() {
     super.setUp();
-    this.createSandbox();
 
     const sessions = await this.loadFixture<Session>(Resources.SESSIONS);
     await this.loadFixture<User>(Resources.USERS);
 
     this.session = sessions[2];
-  }
-
-  tearDown(): void {
-    this.removeDatabase();
-    this.restoreSandbox();
   }
 
   async testGetProfile() {

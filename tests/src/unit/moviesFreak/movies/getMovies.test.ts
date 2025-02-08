@@ -20,6 +20,7 @@ export class GetMoviesTest extends TestCase {
   }
 
   tearDown() {
+    super.tearDown();
     this.removeDatabase();
   }
 
