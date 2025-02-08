@@ -1,9 +1,11 @@
+import { set } from 'lodash';
+
 import AbstractSQLStore from './abstractSQLStore';
 import { Json, UUID } from 'types';
 import { Sort } from '../types';
 import { SQLDatabaseException } from './errors';
 import { SQLTables } from './tables';
-import { User } from 'moviesFreak/entities';
+import { User, UserPassword } from 'moviesFreak/entities';
 import { UserSerializer } from './serializers';
 import {
   EmailAlreadyExists,
@@ -44,6 +46,10 @@ export default class SQLUsersStore extends AbstractSQLStore<User> {
     return this.findOne(SQLTables.USERS, { email });
   }
 
+  findByUsername(username: string): Promise<User> {
+    return this.findOne(SQLTables.USERS, { username });
+  }
+
   protected async find(query: Json): Promise<User[]> {
     let items: Json[];
 
@@ -69,7 +75,15 @@ export default class SQLUsersStore extends AbstractSQLStore<User> {
   }
 
   protected deserialize(data: Json): User {
-    return UserSerializer.fromJson(data);
+    const user = UserSerializer.fromJson(data);
+    const password = new UserPassword({
+      hash: data.password_hash,
+      salt: data.password_salt
+    });
+
+    set(user, 'userPassword', password);
+
+    return user;
   }
 
   protected serialize(user: User): Json {

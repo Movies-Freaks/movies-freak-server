@@ -46,6 +46,10 @@ export default class MemoryUsersStore extends AbstractMemoryStore<User> {
     return this.findOne({ email });
   }
 
+  async findByUsername(username: string) {
+    return this.findOne({ username });
+  }
+
   protected async findOne(filter: Json, sort?: Sort): Promise<User> {
     try {
       return await super.findOne(filter, sort);
