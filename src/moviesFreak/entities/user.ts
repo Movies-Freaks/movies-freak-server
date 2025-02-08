@@ -21,8 +21,12 @@ export class UserPassword {
     return this.passwordSalt;
   }
 
-  static encrypt(password: string) {
-    const salt = Crypto
+  match(password: UserPassword): Boolean {
+    return this.hash === password.hash;
+  }
+
+  static encrypt(password: string, salt?: string) {
+    salt ??= Crypto
       .randomBytes(8)
       .toString('hex');
 
@@ -64,5 +68,11 @@ export default class User extends Entity{
 
   addPassword(password: string) {
     this.userPassword = UserPassword.encrypt(password);
+  }
+
+  doesPasswordMatch(password: string): Boolean {
+    const passwordToCheck = UserPassword.encrypt(password, this.userPassword.salt);
+
+    return this.userPassword.match(passwordToCheck);
   }
 }

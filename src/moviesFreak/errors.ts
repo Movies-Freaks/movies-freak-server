@@ -21,6 +21,28 @@ export class EntityNotFound extends MoviesFreakError {
 
 // SIGN UP ERRORS
 
+export class CouldNotSignIn extends MoviesFreakError {
+  constructor(error?: MoviesFreakError, info?: Json) {
+    super({
+      error,
+      info,
+      message: 'Unexpected error was thrown while signing up.'
+    });
+  }
+}
+
+export class UserNotFound extends EntityNotFound {}
+
+export class PasswordDoesntMatch extends CouldNotSignIn {
+  constructor() {
+    super();
+
+    this.message = 'Password does not match';
+  }
+}
+
+// SIGN UP ERRORS
+
 export class CouldNotSignUp extends MoviesFreakError {
   constructor(error?: MoviesFreakError, info?: Json) {
     super({

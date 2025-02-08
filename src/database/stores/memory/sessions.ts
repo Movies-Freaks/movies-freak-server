@@ -45,8 +45,8 @@ export default class MemorySessionsStore extends AbstractMemoryStore<Session> {
 
   findLatestActiveByUserId(userId: UUID) {
     return this.findOne(
-      { is_active: true, user_id: userId },
-      { created_at: SortOrder.DESC }
+      { isActive: true, userId: userId },
+      { createdAt: SortOrder.DESC }
     );
   }
 

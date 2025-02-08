@@ -30,6 +30,16 @@ class Assertions {
     );
   }
 
+  isLessThan(expected: any) {
+    if (this.actual < expected) {
+      return true;
+    }
+
+    throw new AssertionError(
+      `Expect actual (${this.actual}) to be less than expected (${expected})`
+    );
+  }
+
   isEqual(expected: any) {
     if (isEqual(this.actual, expected)) {
       return true;

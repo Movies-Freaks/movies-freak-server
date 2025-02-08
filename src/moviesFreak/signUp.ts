@@ -50,15 +50,11 @@ export default class SignUp {
   }
 
   protected async createSession(user: User) {
-    const sessionToCreate = Session
+    const session = Session
       .createForUser(user)
       .generateToken()
       .activateToken();
 
-    const session = await this.database.sessions.create(sessionToCreate);
-
-    session.addUser(user);
-
-    return session;
+    return this.database.sessions.create(session);
   }
 }
