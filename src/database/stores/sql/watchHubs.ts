@@ -2,11 +2,11 @@ import { isEmpty } from 'lodash';
 
 import AbstractSQLStore from './abstractSQLStore';
 import { Json, UUID } from 'types';
+import { NotFound, WatchHubNotFound } from '../errors';
 import { Sort, SortOrder } from '../types';
 import { SQLDatabaseException } from './errors';
 import { SQLTables } from './tables';
 import { WatchHub } from 'moviesFreak/entities';
-import { WatchHubNotFound } from '../errors';
 import { WatchHubSerializer } from './serializers';
 
 export default class SQLWatchHubsStore extends AbstractSQLStore<WatchHub> {
@@ -27,7 +27,7 @@ export default class SQLWatchHubsStore extends AbstractSQLStore<WatchHub> {
   }
 
   findById(watchHubId: UUID): Promise<WatchHub> {
-    return this.findOne({ id: watchHubId });
+    return this.findOne(SQLTables.WATCH_HUBS, { id: watchHubId });
   }
 
   async findAll(limit: number, skip: number, sort?: Sort) {
@@ -78,20 +78,14 @@ export default class SQLWatchHubsStore extends AbstractSQLStore<WatchHub> {
     return items.map(this.deserialize.bind(this));
   }
 
-  protected async findOne(query: Json): Promise<WatchHub> {
-    let result: Json;
-
+  protected async findOne(tableName: SQLTables, filter: Json, sort?: Sort): Promise<WatchHub> {
     try {
-      result = await this.connection(SQLTables.WATCH_HUBS)
-        .where(query)
-        .first();
+      return await super.findOne(tableName, filter, sort);
     } catch (error) {
+      if (error instanceof NotFound) throw new WatchHubNotFound(filter);
+
       throw new SQLDatabaseException(error);
     }
-
-    if (!result) throw new WatchHubNotFound(query);
-
-    return this.deserialize(result);
   }
 
   protected deserialize(data: Json): WatchHub {

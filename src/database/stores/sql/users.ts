@@ -1,10 +1,16 @@
 import AbstractSQLStore from './abstractSQLStore';
-import { EmailAlreadyExists, UsernameAlreadyExists, UserNotFound } from '../errors';
 import { Json, UUID } from 'types';
+import { Sort } from '../types';
 import { SQLDatabaseException } from './errors';
 import { SQLTables } from './tables';
 import { User } from 'moviesFreak/entities';
 import { UserSerializer } from './serializers';
+import {
+  EmailAlreadyExists,
+  NotFound,
+  UsernameAlreadyExists,
+  UserNotFound
+} from '../errors';
 
 export default class SQLUsersStore extends AbstractSQLStore<User> {
   async create(user: User): Promise<User> {
@@ -31,7 +37,11 @@ export default class SQLUsersStore extends AbstractSQLStore<User> {
   }
 
   findById(userId: UUID): Promise<User> {
-    return this.findOne({ id: userId });
+    return this.findOne(SQLTables.USERS, { id: userId });
+  }
+
+  findByEmail(email: string): Promise<User> {
+    return this.findOne(SQLTables.USERS, { email });
   }
 
   protected async find(query: Json): Promise<User[]> {
@@ -48,20 +58,14 @@ export default class SQLUsersStore extends AbstractSQLStore<User> {
     return items.map(this.deserialize.bind(this));
   }
 
-  protected async findOne(query: Json): Promise<User> {
-    let result: Json;
-
+  protected async findOne(tableName: SQLTables, filter: Json, sort?: Sort): Promise<User> {
     try {
-      result = await this.connection(SQLTables.USERS)
-        .where(query)
-        .first();
+      return await super.findOne(tableName, filter, sort);
     } catch (error) {
+      if (error instanceof NotFound) throw new UserNotFound(filter);
+
       throw new SQLDatabaseException(error);
     }
-
-    if (!result) throw new UserNotFound(query);
-
-    return this.deserialize(result);
   }
 
   protected deserialize(data: Json): User {

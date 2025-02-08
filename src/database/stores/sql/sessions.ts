@@ -1,13 +1,13 @@
 import AbstractSQLStore from './abstractSQLStore';
 import { Json, UUID } from 'types';
 import { Session } from 'moviesFreak/entities';
-import { SessionNotFound, TokenAlreadyUsed, UserNotFound } from 'database/stores/errors';
-import { SessionSchema } from 'database/schemas';
+import { NotFound, SessionNotFound, TokenAlreadyUsed, UserNotFound } from '../errors';
 import { SessionSerializer } from './serializers';
 import { SQLDatabaseException } from './errors';
 import { SQLTables } from './tables';
+import { Sort } from '../types';
 
-export default class SQLSessionsStore extends AbstractSQLStore<SessionSchema> {
+export default class SQLSessionsStore extends AbstractSQLStore<Session> {
   async create(session: Session) {
     const dataToInsert = this.serialize(session);
 
@@ -32,14 +32,14 @@ export default class SQLSessionsStore extends AbstractSQLStore<SessionSchema> {
   }
 
   findById(sessionId: UUID): Promise<Session> {
-    return this.findOne({ id: sessionId });
+    return this.findOne(SQLTables.SESSIONS, { id: sessionId });
   }
 
   findActiveSessionByToken(token: string): Promise<Session> {
-    return this.findOne({
-      token,
-      is_active: false
-    });
+    return this.findOne(
+      SQLTables.SESSIONS,
+      { token, is_active: false }
+    );
   }
 
   protected async find(query: Json): Promise<Session[]> {
@@ -56,20 +56,14 @@ export default class SQLSessionsStore extends AbstractSQLStore<SessionSchema> {
     return items.map(this.deserialize.bind(this));
   }
 
-  protected async findOne(query: Json): Promise<Session> {
-    let result: Json;
-
+  protected async findOne(tableName: SQLTables, filter: Json, sort?: Sort): Promise<Session> {
     try {
-      result = await this.connection(SQLTables.SESSIONS)
-        .where(query)
-        .first();
+      return await super.findOne(tableName, filter, sort);
     } catch (error) {
+      if (error instanceof NotFound) throw new SessionNotFound(filter);
+
       throw new SQLDatabaseException(error);
     }
-
-    if (!result) throw new SessionNotFound(query);
-
-    return this.deserialize(result);
   }
 
   protected deserialize(data: Json): Session {

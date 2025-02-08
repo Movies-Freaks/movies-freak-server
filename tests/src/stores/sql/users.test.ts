@@ -136,3 +136,43 @@ export class FindByIdTest extends UsersStoreTest {
     ).willBeRejectedWith(SQLDatabaseException);
   }
 }
+
+export class FindByEmailTest extends UsersStoreTest {
+  protected email: string;
+
+  async setUp() {
+    await super.setUp();
+
+    this.email = 'potter.weasley@hogwarts.wiz';
+  }
+
+  async testFindEmail() {
+    const userFound = await this.database
+      .users
+      .findByEmail(this.email);
+
+    this.assertThat(userFound).isInstanceOf(User);
+    this.assertThat(userFound.name).isEqual('Albus Severus');
+    this.assertThat(userFound.email).isEqual('potter.weasley@hogwarts.wiz');
+    this.assertThat(userFound.username).isEqual('albus');
+  }
+
+  async testThrowsErrorWhenEmailIsNotFound() {
+    await this.assertThat(
+      this.database
+        .users
+        .findByEmail('jon@doe.com')
+    ).willBeRejectedWith(UserNotFound);
+  }
+
+  async testThrowsErrorOnUnexpectedError() {
+    this.stubFunction(this.database.users, 'connection')
+      .throws(new SerializerError());
+
+    await this.assertThat(
+      this.database
+        .users
+        .findByEmail(this.email)
+    ).willBeRejectedWith(SQLDatabaseException);
+  }
+}

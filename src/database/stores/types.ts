@@ -1,4 +1,4 @@
-import { SpecificJson } from 'types';
+import { Json, SpecificJson } from 'types';
 
 export enum SortOrder {
   ASC = 'asc',
@@ -6,3 +6,8 @@ export enum SortOrder {
 }
 
 export type Sort = SpecificJson<SortOrder>;
+
+export type Query = {
+  filter?: Json,
+  sort?: Sort
+};

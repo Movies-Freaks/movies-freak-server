@@ -1,6 +1,7 @@
 import AbstractMemoryStore from './abstractMemoryStore';
+import { Json, UUID } from 'types';
+import { Sort } from '../types';
 import { User } from 'moviesFreak/entities';
-import { UUID } from 'types';
 import {
   EmailAlreadyExists,
   NotFound,
@@ -35,6 +36,22 @@ export default class MemoryUsersStore extends AbstractMemoryStore<User> {
     } catch (error: any) {
       if (error instanceof NotFound) {
         throw new UserNotFound({ id: userId });
+      }
+
+      throw error;
+    }
+  }
+
+  async findByEmail(email: string) {
+    return this.findOne({ email });
+  }
+
+  protected async findOne(filter: Json, sort?: Sort): Promise<User> {
+    try {
+      return await super.findOne(filter, sort);
+    } catch (error: any) {
+      if (error instanceof NotFound) {
+        throw new UserNotFound({ filter, sort });
       }
 
       throw error;

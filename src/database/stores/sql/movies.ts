@@ -3,7 +3,7 @@ import { isEmpty } from 'lodash';
 import AbstractSQLStore from './abstractSQLStore'
 import { Json, UUID } from 'types';
 import { Movie } from 'moviesFreak/entities';
-import { MovieNotFound, IMDBIdAlreadyExists } from '../errors';
+import { MovieNotFound, IMDBIdAlreadyExists, NotFound } from '../errors';
 import { MovieSerializer } from './serializers';
 import { Sort, SortOrder } from '../types';
 import { SQLDatabaseException } from './errors';
@@ -31,11 +31,11 @@ export default class SQLMoviesStore extends AbstractSQLStore<Movie> {
   }
 
   findById(movieId: UUID): Promise<Movie> {
-    return this.findOne({ id: movieId })
+    return this.findOne(SQLTables.MOVIES, { id: movieId })
   }
 
   findByIMDBId(imdbId: string): Promise<Movie> {
-    return this.findOne({ imdb_id: imdbId })
+    return this.findOne(SQLTables.MOVIES, { imdb_id: imdbId })
   }
 
   async findAll(limit: number, skip: number, sort?: Sort) {
@@ -86,20 +86,14 @@ export default class SQLMoviesStore extends AbstractSQLStore<Movie> {
     return items.map(this.deserialize.bind(this));
   }
 
-  protected async findOne(query: Json): Promise<Movie> {
-    let result: Json;
-
+  protected async findOne(tableName: SQLTables, filter: Json, sort?: Sort): Promise<Movie> {
     try {
-      result = await this.connection(SQLTables.MOVIES)
-        .where(query)
-        .first();
+      return await super.findOne(tableName, filter, sort);
     } catch (error) {
+      if (error instanceof NotFound) throw new MovieNotFound(filter);
+
       throw new SQLDatabaseException(error);
     }
-
-    if (!result) throw new MovieNotFound(query);
-
-    return this.deserialize(result);
   }
 
   protected deserialize(data: Json): Movie {

@@ -1,10 +1,10 @@
-import { cloneDeep, get, isEmpty } from 'lodash';
+import { cloneDeep, get, isEmpty, isNil } from 'lodash';
 import { v4 as uuid } from 'uuid';
 
 import AbstractStore from '../abstractStore';
 import { Json, UUID, UUIDJson } from 'types';
 import { NotFound } from '../errors';
-import { Sort, SortOrder } from '../types';
+import { Query, Sort, SortOrder } from '../types';
 
 export default abstract class AbstractMemoryStore<T> extends AbstractStore<T> {
   protected items: UUIDJson<T>;
@@ -77,25 +77,27 @@ export default abstract class AbstractMemoryStore<T> extends AbstractStore<T> {
       }, items);
   }
 
-  protected async find(query: Json = {}): Promise<T[]> {
-    const items = Object.values(this.items)
+  protected async find(query: Query = {}): Promise<T[]> {
+    const { filter, sort } = query;
+
+    let result = Object.values(this.items)
       .filter((item) => {
-        return Object.keys(query)
+        return Object.keys(filter)
         .reduce(
-          (succeed, key) => succeed && get(query, key) === get(item, key),
+          (succeed, key) => succeed && get(filter, key) === get(item, key),
           true
         );
       });
 
-    return cloneDeep(items);
+    if (!isEmpty(sort)) result = this.applySorting(result, sort);
+
+    return cloneDeep(result);
   }
 
-  protected async findOne(query: Json): Promise<T> {
-    const [entity] = await this.find(query);
+  protected async findOne(filter: Json, sort?: Sort): Promise<T> {
+    const [entity] = await this.find({ filter, sort });
 
-    if (!entity) {
-      throw new NotFound(query);
-    }
+    if (isNil(entity)) throw new NotFound(filter);
 
     return entity;
   }
