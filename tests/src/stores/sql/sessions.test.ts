@@ -1,4 +1,5 @@
 import DateUtils from 'jesusx21/dateUtils';
+import { set } from 'lodash';
 
 import Constants from 'tests/src/fixtures/constants';
 import SQLTestCase from '../testCase';
@@ -15,8 +16,8 @@ class SessionsStoreTest extends SQLTestCase {
   async setUp() {
     super.setUp();
 
-      await this.loadFixture(Resources.USERS);
-      this.sessions = await this.loadFixture<Session>(Resources.SESSIONS);
+    await this.loadFixture(Resources.USERS);
+    this.sessions = await this.loadFixture<Session>(Resources.SESSIONS);
   }
 }
 
@@ -115,6 +116,149 @@ export class FindByIdTest extends SessionsStoreTest {
       this.database
         .sessions
         .findById(this.sessionId)
+    ).willBeRejectedWith(SQLDatabaseException);
+  }
+}
+
+export class FindSessionByTokenTest extends SessionsStoreTest {
+  protected token: string;
+
+  async setUp() {
+    await super.setUp();
+
+    this.token = Constants.TOKEN_5;
+  }
+
+  async testFindSessionByToken() {
+    const sessionFound = await this.database
+      .sessions
+      .findByToken(this.token);
+
+    this.assertThat(sessionFound.token).isEqual('0e127cd7f6e5ae88983265807bb3994a');
+    this.assertThat(sessionFound.isActive).isTrue();
+  }
+
+  async testThrowsErrorWhenSessionIsNotFound() {
+    await this.assertThat(
+      this.database
+        .sessions
+        .findByToken('InvalidToken')
+    ).willBeRejectedWith(SessionNotFound);
+  }
+
+  async testThrowsErrorOnUnexpectedError() {
+    this.stubFunction(this.database.sessions, 'connection')
+      .throws(new Error());
+
+    await this.assertThat(
+      this.database
+        .sessions
+        .findByToken(this.token)
+    ).willBeRejectedWith(SQLDatabaseException);
+  }
+}
+
+export class FindLatestActiveByUserIdTest extends SessionsStoreTest {
+  async testFindLatestActiveSessionByUserId() {
+    const sessionFound = await this.database
+      .sessions
+      .findLatestActiveByUserId(Constants.USER_1);
+
+    this.assertThat(sessionFound.userId).isEqual('3e4252d5-fdca-4e00-906a-70407982699d');
+    this.assertThat(sessionFound.isActive).isTrue();
+  }
+
+  async testThrowsErrorWhenUserHasNotActiveSessions() {
+    const session = await this.database
+      .sessions
+      .findLatestActiveByUserId(Constants.USER_1);
+
+    session.deactivateToken();
+    await this.database.sessions.update(session);
+
+    await this.assertThat(
+      this.database
+        .sessions
+        .findLatestActiveByUserId(Constants.USER_1)
+    ).willBeRejectedWith(SessionNotFound);
+  }
+
+  async testThrowsErrorOnUnexpectedError() {
+    this.stubFunction(this.database.sessions, 'connection')
+      .throws(new Error());
+
+    await this.assertThat(
+      this.database
+        .sessions
+        .findLatestActiveByUserId(Constants.USER_1)
+    ).willBeRejectedWith(SQLDatabaseException);
+  }
+}
+
+export class UpdateSessionTest extends SessionsStoreTest {
+  private session: Session;
+  private token: string;
+
+  async setUp(): Promise<void> {
+    await super.setUp();
+
+    this.session = this.sessions[1]
+    this.token = this.session.token;
+  }
+
+  async testUpdateToken() {
+    this.session.generateToken();
+
+    const sessionUpdated = await this.database
+      .sessions
+      .update(this.session);
+
+    this.assertThat(sessionUpdated.id).isEqual(this.session.id);
+    this.assertThat(sessionUpdated.token).isNotEqual(this.token);
+    this.assertThat(sessionUpdated.isActive).isFalse();
+  }
+
+  async testUpdateTokenActivation() {
+    this.session.generateToken()
+      .activateToken();
+
+    const sessionUpdated = await this.getDatabase()
+      .sessions
+      .update(this.session);
+
+    this.assertThat(sessionUpdated.token).isNotEqual(this.token);
+    this.assertThat(sessionUpdated.expiresAt).doesExist();
+    this.assertThat(sessionUpdated.isActive).isTrue();
+  }
+
+  async testIgnoresNotEditableFields() {
+    set(this.session, 'createdAt',  new Date());
+
+    const sessionUpdated = await this.getDatabase()
+      .sessions
+      .update(this.session);
+
+    this.assertThat(sessionUpdated.createdAt).isNotEqual(this.session.createdAt);
+  }
+
+  async testThrowNotFoundWhenSessionDoesNotExist() {
+    set(this.session, 'id',  this.generateUUID());
+
+    this.assertThat(
+      this.getDatabase()
+        .sessions
+        .update(this.session)
+    ).willBeRejectedWith(SessionNotFound);
+  }
+
+  async testThrowsErrorOnUnexpectedError() {
+    this.stubFunction(this.database.sessions, 'connection')
+      .throws(new Error());
+
+    await this.assertThat(
+      this.getDatabase()
+        .sessions
+        .update(this.session)
     ).willBeRejectedWith(SQLDatabaseException);
   }
 }

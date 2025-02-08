@@ -1,11 +1,18 @@
+import { isNil } from 'lodash';
+
 import AbstractSQLStore from './abstractSQLStore';
 import { Json, UUID } from 'types';
 import { Session } from 'moviesFreak/entities';
-import { NotFound, SessionNotFound, TokenAlreadyUsed, UserNotFound } from '../errors';
 import { SessionSerializer } from './serializers';
+import { Sort, SortOrder } from '../types';
 import { SQLDatabaseException } from './errors';
 import { SQLTables } from './tables';
-import { Sort } from '../types';
+import {
+  NotFound,
+  SessionNotFound,
+  TokenAlreadyUsed,
+  UserNotFound
+} from '../errors';
 
 export default class SQLSessionsStore extends AbstractSQLStore<Session> {
   async create(session: Session) {
@@ -35,11 +42,41 @@ export default class SQLSessionsStore extends AbstractSQLStore<Session> {
     return this.findOne(SQLTables.SESSIONS, { id: sessionId });
   }
 
-  findActiveSessionByToken(token: string): Promise<Session> {
+  findByToken(token: string): Promise<Session> {
     return this.findOne(
       SQLTables.SESSIONS,
-      { token, is_active: false }
+      { token }
     );
+  }
+
+  findLatestActiveByUserId(userId: UUID) {
+    return this.findOne(
+      SQLTables.SESSIONS,
+      { is_active: true, user_id: userId },
+      { created_at: SortOrder.DESC }
+    );
+  }
+
+  async update(session: Session): Promise<Session> {
+    let result: Json;
+
+    try {
+      [result] = await this.connection(SQLTables.SESSIONS)
+        .update({
+          token: session.token,
+          expires_at: session.expiresAt,
+          is_active: session.isActive,
+          updated_at: session.updatedAt
+        })
+        .where('id', session.id)
+        .returning('*');
+    } catch (error) {
+      throw new SQLDatabaseException(error);
+    }
+
+    if (isNil(result)) throw new SessionNotFound({ id: session.id });
+
+    return this.deserialize(result);
   }
 
   protected async find(query: Json): Promise<Session[]> {

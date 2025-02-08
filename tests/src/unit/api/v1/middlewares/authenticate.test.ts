@@ -76,11 +76,21 @@ export class AuthenticateTest extends APITestCase {
   }
 
   async testReturnsErorrWhenDatabaseFails() {
-    this.stubFunction(this.database.sessions, 'findActiveSessionByToken')
+    this.stubFunction(this.database.sessions, 'findByToken')
       .rejects(new DatabaseError());
 
     await this.assertThat(
       authenticate(this.request, this.resource)
     ).willBeRejectedWith(HTTPInternalError);
+  }
+
+  async testReturnAnExpiredToken() {
+    this.request.headers.authorization = `Bearer ${Constants.TOKEN_2}`;
+
+    const error = await this.assertThat(
+      authenticate(this.request, this.resource)
+    ).willBeRejectedWith<HTTPUnauthorized>(HTTPUnauthorized);
+
+    this.assertThat(error.payload.code).isEqual('TOKEN_EXPIRED');
   }
 }

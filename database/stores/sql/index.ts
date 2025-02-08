@@ -1,30 +1,24 @@
 import { Knex } from 'knex';
 
 import SQLMediaWatchlistsStore from './mediaWatchlist';
-import SQLSessionsStore from './sessions';
 import SQLTVEpisodeStore from './tvEpisodes';
 import SQLTVSeasonStore from './tvSeason';
 import SQLTVSeriesStore from './tvSeries';
-import SQLUsersStore from './users';
 
 class SQLDatabase {
   readonly connection: any;
   readonly mediaWatchlists: SQLMediaWatchlistsStore;
-  readonly sessions: SQLSessionsStore;
   readonly tvEpisodes: SQLTVEpisodeStore;
   readonly tvSeasons: SQLTVSeasonStore;
   readonly tvSeries: SQLTVSeriesStore;
-  readonly users: SQLUsersStore;
 
   constructor(connection: Knex) {
     this.connection = connection;
 
     this.mediaWatchlists = new SQLMediaWatchlistsStore(this.connection, this);
-    this.sessions = new SQLSessionsStore(this.connection, this);
     this.tvEpisodes = new SQLTVEpisodeStore(this.connection);
     this.tvSeasons = new SQLTVSeasonStore(this.connection);
     this.tvSeries = new SQLTVSeriesStore(this.connection);
-    this.users = new SQLUsersStore(this.connection);
   }
 
   async withTransaction(fn: Function, ...args: any[]) {

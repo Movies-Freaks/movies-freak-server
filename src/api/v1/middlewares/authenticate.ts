@@ -30,7 +30,7 @@ export default async function authenticate(req: Request, resourceInstance: Monop
   try {
     session = await database
       .sessions
-      .findActiveSessionByToken(token);
+      .findByToken(token);
 
     user = await database
       .users
@@ -42,6 +42,8 @@ export default async function authenticate(req: Request, resourceInstance: Monop
 
     throw new HTTPInternalError(error);
   }
+
+  if (!session.isActive) throw new HTTPUnauthorized('TOKEN_EXPIRED');
 
   resourceInstance.setTitle('session', session);
   resourceInstance.setTitle('user', user);

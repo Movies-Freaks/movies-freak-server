@@ -1,7 +1,10 @@
+import { isNil, set } from 'lodash';
+
 import AbstractMemoryStore from './abstractMemoryStore';
+import { Json, UUID } from 'types';
 import { NotFound, SessionNotFound, TokenAlreadyUsed } from '../errors';
 import { Session } from 'moviesFreak/entities';
-import { UUID } from 'types';
+import { Sort, SortOrder } from '../types';
 
 export default class MemorySessionsStore extends AbstractMemoryStore<Session> {
   async create(session: Session) {
@@ -28,15 +31,41 @@ export default class MemorySessionsStore extends AbstractMemoryStore<Session> {
     }
   }
 
-  async findActiveSessionByToken(token: string): Promise<Session> {
+  async findByToken(token: string): Promise<Session> {
     try {
-      return await this.findOne({
-        token,
-        isActive: true
-      });
+      return await this.findOne({ token });
     } catch (error: any) {
       if (error instanceof NotFound) {
         throw new SessionNotFound({ token });
+      }
+
+      throw error;
+    }
+  }
+
+  findLatestActiveByUserId(userId: UUID) {
+    return this.findOne(
+      { is_active: true, user_id: userId },
+      { created_at: SortOrder.DESC }
+    );
+  }
+
+  async update(session: Session): Promise<Session> {
+    if (isNil(this.items[session.id])) throw new SessionNotFound({ id: session.id });
+
+    set(session, 'updatedAt', new Date());
+
+    this.items[session.id] = session;
+
+    return session;
+  }
+
+  protected async findOne(filter: Json, sort?: Sort): Promise<Session> {
+    try {
+      return await super.findOne(filter, sort);
+    } catch (error: any) {
+      if (error instanceof NotFound) {
+        throw new SessionNotFound({ filter, sort });
       }
 
       throw error;
