@@ -60,14 +60,20 @@ export default class APITestCase extends TestCase {
 
   async simulatePost<T = Json>(params: PostRequestParams): Promise<T> {
     const {
+      token,
       payload = {},
       statusCode = 201,
       ...requestParams
     } = params;
 
-    const { body } = await this.initRequest(RequestVerb.POST, requestParams)
-      .send(payload)
-      .expect(statusCode);
+    let request = this.initRequest(RequestVerb.POST, requestParams)
+      .send(payload);
+
+    if (!isNil(token)) {
+      request = request.set('Authorization', `Bearer ${token}`)
+    }
+
+    const { body } = await request.expect(statusCode);
 
     return body;
   }

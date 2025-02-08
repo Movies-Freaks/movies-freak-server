@@ -19,10 +19,6 @@ export class SignUpTest extends APITestCase {
     };
   }
 
-  tearDown() {
-    super.tearDown();
-  }
-
   async testSignUpUser() {
     const result = await this.simulatePost<SessionSchema>({
       path: '/signUp',

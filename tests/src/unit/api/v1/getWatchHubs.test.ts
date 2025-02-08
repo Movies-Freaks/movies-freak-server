@@ -1,6 +1,7 @@
 import { APIError, HTTPStatusCode } from 'jesusx21/boardGame/types';
 
 import APITestCase from '../apiTestCase';
+import constants from 'tests/src/fixtures/constants';
 import { Resources } from 'tests/src/fixtures/type';
 
 import GetWatchHubs from 'moviesFreak/watchHubs/getList';
@@ -13,11 +14,17 @@ export class GetWatchHubsTest extends APITestCase {
   async setUp() {
     super.setUp();
 
+
+    await this.loadFixture(Resources.USERS);
+    await this.loadFixture(Resources.SESSIONS);
     this.watchHubs = await this.loadFixture(Resources.WATCH_HUBS);
   }
 
   async testGetWatchHubsWithoutSendingPagination() {
-    const result = await this.simulateGet<WatchHubList>({ path: '/watchHubs' });
+    const result = await this.simulateGet<WatchHubList>({
+      path: '/watchHubs',
+      token: constants.TOKEN_3
+    });
 
     this.assertThat(result.items).hasLengthOf(5);
     this.assertThat(result.pagination.page).isEqual(1);
@@ -28,7 +35,8 @@ export class GetWatchHubsTest extends APITestCase {
   async testGetWatchHubsWithoutSendingPage() {
     const result = await this.simulateGet<WatchHubList>({
       path: '/watchHubs',
-      query: { perPage: 2 }
+      query: { perPage: 2 },
+      token: constants.TOKEN_3
     });
 
     this.assertThat(result.items).hasLengthOf(2);
@@ -40,7 +48,8 @@ export class GetWatchHubsTest extends APITestCase {
   async testGetWatchHubsWithoutSendingPerPage() {
     const result = await this.simulateGet<WatchHubList>({
       path: '/watchHubs',
-      query: { page: 1 }
+      query: { page: 1 },
+      token: constants.TOKEN_3
     });
 
     this.assertThat(result.items).hasLengthOf(5);
@@ -52,7 +61,8 @@ export class GetWatchHubsTest extends APITestCase {
   async testGetWatchHubsWithSendingPagination() {
     const result = await this.simulateGet<WatchHubList>({
       path: '/watchHubs',
-      query: { page: 3, perPage: 2 }
+      query: { page: 3, perPage: 2 },
+      token: constants.TOKEN_3
     });
 
     this.assertThat(result.items).hasLengthOf(1);
@@ -64,7 +74,8 @@ export class GetWatchHubsTest extends APITestCase {
   async testGetWatchHubsWithAscendingSort() {
     const result = await this.simulateGet<WatchHubList>({
       path: '/watchHubs',
-      query: { sort: 'name' }
+      query: { sort: 'name' },
+      token: constants.TOKEN_3
     });
 
     this.assertThat(result.items[0].name).isEqual('A Very Christmas List');
@@ -77,7 +88,8 @@ export class GetWatchHubsTest extends APITestCase {
   async testGetMoviesWithDescendingSort() {
     const result = await this.simulateGet<WatchHubList>({
       path: '/watchHubs',
-      query: { sort: '-name' }
+      query: { sort: '-name' },
+      token: constants.TOKEN_3
     });
 
     this.assertThat(result.items[0].name).isEqual('Start Wars Timeline');
@@ -87,6 +99,25 @@ export class GetWatchHubsTest extends APITestCase {
     this.assertThat(result.items[4].name).isEqual('A Very Christmas List');
   }
 
+  async testReturnErrorWhenAuthenticationTokenIsNotSent() {
+    const result = await this.simulateGet<APIError>({
+      path: '/watchHubs',
+      statusCode: 401
+    });
+
+    this.assertThat(result.code).isEqual('UNAUTHORIZED');
+  }
+
+  async testReturnErrorWhenUserIsNotAuthenticated() {
+    const result = await this.simulateGet<APIError>({
+      path: '/watchHubs',
+      statusCode: 401,
+      token: constants.TOKEN_4
+    });
+
+    this.assertThat(result.code).isEqual('TOKEN_EXPIRED');
+  }
+
   async testReturnsErrorOnUnexpectedError() {
     this.mockClass(GetWatchHubs, 'instance')
       .expects('execute')
@@ -94,7 +125,8 @@ export class GetWatchHubsTest extends APITestCase {
 
     const result = await this.simulateGet<APIError>({
       path: '/watchHubs',
-      statusCode: HTTPStatusCode.UNEXPECTED_ERROR
+      statusCode: HTTPStatusCode.UNEXPECTED_ERROR,
+      token: constants.TOKEN_3
     });
 
     this.assertThat(result.code).isEqual('UNEXPECTED_ERROR');

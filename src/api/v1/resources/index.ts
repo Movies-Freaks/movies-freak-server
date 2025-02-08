@@ -32,7 +32,7 @@ export default class MoviesFreakAPI {
     this.app.registerResource('/profile', profileResource, [authenticate]);
     this.app.registerResource('/signIn', signInResource);
     this.app.registerResource('/signUp', signUpResource);
-    this.app.registerResource('/watchHubs', watchHubsResource, [parseQuerySort]);
-    this.app.registerResource('/watchHubs/:watchHubId', watchHubResource);
+    this.app.registerResource('/watchHubs', watchHubsResource, [authenticate, parseQuerySort]);
+    this.app.registerResource('/watchHubs/:watchHubId', watchHubResource, [authenticate]);
   }
 }
