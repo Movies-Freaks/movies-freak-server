@@ -32,6 +32,7 @@ export class CreateWatchHubTest extends APITestCase {
     this.assertThat(body.name).isEqual('Horroctober');
     this.assertThat(body.description).isEqual('A list of movies for your halloween marathon');
     this.assertThat(body.privacy).isEqual(WatchHubPrivacy.PRIVATE);
+    this.assertThat(body.ownerId).isEqual('fb720643-1d12-4fca-8d2f-61a18d842d2c');
     this.assertThat(body.createdAt).doesExist();
     this.assertThat(body.updatedAt).doesExist();
   }

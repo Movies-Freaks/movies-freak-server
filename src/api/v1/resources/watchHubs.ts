@@ -6,7 +6,7 @@ import WatchHubs from 'moviesFreak/watchHubs';
 import Pagination from 'api/pagination';
 import { Database } from 'database';
 import { Json } from 'types';
-import { WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
+import { User, WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
 import { WatchHubList } from '../types';
 import { WatchHubSchema } from 'database/schemas';
 
@@ -15,11 +15,19 @@ const VALID_PRIVACIES = Object.values(WatchHubPrivacy);
 export default class WatchHubsResource extends Monopoly {
   async onPost(request: Request): Promise<Response<WatchHubSchema>> {
     const database: Database = this.getTitle('database');
+    const user: User = this.getTitle('user');
+
     const { name, privacy, description } = request.body;
 
     if (!VALID_PRIVACIES.includes(privacy)) throw new HTTPBadInput('PRIVACY_NOT_SUPPORTED');
 
-    const createWatchHub = new WatchHubs.Create(database, name, privacy, description);
+    const createWatchHub = new WatchHubs.Create(
+      database,
+      user,
+      name,
+      privacy,
+      description
+    );
 
     let watchHub: WatchHub;
 

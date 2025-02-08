@@ -2,19 +2,22 @@ import TestCase from 'tests/src/testCase';
 
 import CreateWatchHub from 'moviesFreak/watchHubs/create';
 import { CouldNotCreateWatchHub } from 'moviesFreak/watchHubs/errors';
-import { Database } from 'database';
-import { WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
+import { User, WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
+import { Resources } from 'tests/src/fixtures/type';
 
 export default class CreateWatchHubTest extends TestCase {
-  protected createWatchHub: CreateWatchHub;
-  protected database: Database;
+  createWatchHub: CreateWatchHub;
+  owners: User[];
 
-  setUp() {
+  async setUp() {
     super.setUp();
 
     this.database = this.getDatabase();
+    this.owners = await this.loadFixture(Resources.USERS);
+
     this.createWatchHub = new CreateWatchHub(
       this.database,
+      this.owners[3],
       'Horroctober',
       WatchHubPrivacy.SHARED,
       'A collection of horror movies for marathon october'
@@ -33,6 +36,7 @@ export default class CreateWatchHubTest extends TestCase {
     this.assertThat(watchHub.id).doesExist();
     this.assertThat(watchHub.name).isEqual('Horroctober');
     this.assertThat(watchHub.privacy).isEqual(WatchHubPrivacy.SHARED);
+    this.assertThat(watchHub.ownerId).isEqual('5c54e81b-589a-4d29-96c4-1519ba407dc0');
     this.assertThat(watchHub.description)
       .isEqual('A collection of horror movies for marathon october');
   }

@@ -7,8 +7,9 @@ const WatchHubSerializer = Serializer
   .addSchema(
     field('id'),
     field('name'),
-    field('privacy'),
     field('description'),
+    field('privacy'),
+    field('owner_id', { from: 'ownerId' }),
     field('created_at', { from: 'createdAt' }),
     field('updated_at', { from: 'updatedAt' })
   );

@@ -31,7 +31,7 @@ export default class SQLTestCase extends TestCase {
     if (!this.connection) return;
 
     const knexCleanerConfig: KnexCleanerOptions = {
-      mode: 'delete',
+      mode: 'truncate',
       ignoreTables: [
         'knex_migrations',
         'knex_migrations_lock',
@@ -40,7 +40,7 @@ export default class SQLTestCase extends TestCase {
     };
 
     await knexCleaner.clean(this.connection, knexCleanerConfig);
-    this.connection.destroy();
+    await this.connection.destroy();
 
     this.connection = undefined;
     this.database = undefined;
@@ -62,9 +62,7 @@ export default class SQLTestCase extends TestCase {
   }
 
   buildDatabaseConnection() {
-    if (this.connection) {
-      return this.connection;
-    }
+    if (this.connection) return this.connection;
 
     const config = knexConfig[Env.TESTING];
     this.connection = knex(config);

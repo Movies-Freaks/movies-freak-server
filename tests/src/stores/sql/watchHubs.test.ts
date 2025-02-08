@@ -4,16 +4,18 @@ import SQLTestCase from '../testCase';
 import { Resources } from 'tests/src/fixtures/type';
 
 import { SQLDatabaseException } from 'database/stores/sql/errors';
+import { User, WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
 import { UUID } from 'types';
-import { WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
 import { WatchHubNotFound } from 'database/stores/errors';
 
 class WatchHubsStoreTest extends SQLTestCase {
-  protected watchHubs: WatchHub[];
+  users: User[];
+  watchHubs: WatchHub[];
 
   async setUp() {
     super.setUp();
 
+    this.users = await this.loadFixture<User>(Resources.USERS);
     this.watchHubs = await this.loadFixture<WatchHub>(Resources.WATCH_HUBS);
   }
 }
@@ -37,6 +39,7 @@ export class CreateWatchHubTest extends WatchHubsStoreTest {
     this.assertThat(watchHubCreated.name).isEqual('Conjuring Universe');
     this.assertThat(watchHubCreated.description).isEqual('A timeline for the conjuring movies');
     this.assertThat(watchHubCreated.privacy).isEqual('public');
+    this.assertThat(watchHubCreated.ownerId).isEqual('e42d57e4-ddb0-4a63-9d88-b452f4979abe');
   }
 
   async testThrowErrorOnSerializationError() {
@@ -61,11 +64,15 @@ export class CreateWatchHubTest extends WatchHubsStoreTest {
   }
 
   private buildWatchHub() {
-    return new WatchHub({
+    const watchHub = new WatchHub({
       name: 'Conjuring Universe',
       description: 'A timeline for the conjuring movies',
       privacy: WatchHubPrivacy.PUBLIC
     });
+
+    watchHub.setOwner(this.users[1]);
+
+    return watchHub;
   }
 }
 

@@ -1,4 +1,4 @@
-const Constants = {
+const constants = {
   TOKEN_1: 'a6df1b194a1877ac3d246cdc8801183e',
   TOKEN_2: '9c7ae8b07eeb4d7bce7afb37444ed0ea',
   TOKEN_3: 'e98b2081275287a98c78d353e2452c42',
@@ -22,4 +22,4 @@ const Constants = {
   USER_5: 'ef549ea6-80a7-4957-a020-b6db989fe88a'
 };
 
-export default Constants;
+export default constants;

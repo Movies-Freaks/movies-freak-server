@@ -1,32 +1,25 @@
 
 import { CouldNotCreateWatchHub } from './errors';
 import { Database } from 'database';
-import { WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
+import { User, WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
 
 export default class CreateWatchHub {
-  private database: Database;
-  private name: string;
-  private privacy: WatchHubPrivacy;
-  private description: string;
-
   constructor(
-    database: Database,
-    name: string,
-    privacy: WatchHubPrivacy,
-    description: string
-  ) {
-    this.database = database;
-    this.name = name;
-    this.privacy = privacy;
-    this.description = description;
-  }
+    private database: Database,
+    private user: User,
+    private name: string,
+    private privacy: WatchHubPrivacy,
+    private description: string
+  ) {}
 
   async execute() {
-    const watchHub = await new WatchHub({
+    const watchHub = new WatchHub({
       name: this.name,
       privacy: this.privacy,
       description: this.description
     });
+
+    watchHub.setOwner(this.user);
 
     try {
       return await this.database.watchHubs.create(watchHub);

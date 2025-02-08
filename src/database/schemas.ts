@@ -50,5 +50,6 @@ export type WatchHubSchema = StoreSchema & {
   description: string,
   name: string,
   privacy: WatchHubPrivacy,
+  ownerId?: UUID,
   totalMovies?: number
 }
