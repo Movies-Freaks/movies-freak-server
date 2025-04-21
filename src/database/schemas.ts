@@ -53,3 +53,10 @@ export type WatchHubSchema = StoreSchema & {
   ownerId?: UUID,
   totalMovies?: number
 }
+
+export type WatchHubsCollaboratorSchema = StoreSchema & {
+  username: string,
+  name?: string,
+  firstLastName?: string,
+  secondLastName?: string
+}
