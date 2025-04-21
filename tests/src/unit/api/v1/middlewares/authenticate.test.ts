@@ -1,11 +1,11 @@
 import { HTTPInternalError, HTTPUnauthorized, Monopoly } from 'jesusx21/boardGame';
 import { Request } from 'jesusx21/boardGame/types';
 
-import { Resources } from 'tests/src/fixtures/type';
 import APITestCase from '../../apiTestCase';
+import constants from 'tests/src/fixtures/constants';
+import { Resources } from 'tests/src/fixtures/type';
 
 import authenticate from 'api/v1/middlewares/authenticate';
-import Constants from 'tests/src/fixtures/constants';
 import { DatabaseError } from 'database/errors';
 
 class FakeResource extends Monopoly {}
@@ -26,7 +26,7 @@ export class AuthenticateTest extends APITestCase {
 
     this.request = {
       headers: {
-        authorization: `Bearer ${Constants.TOKEN_3}`
+        authorization: `Bearer ${constants.sessions.TOKEN_3}`
       }
     } as any as Request;
   }
@@ -58,7 +58,7 @@ export class AuthenticateTest extends APITestCase {
   }
 
   async testReturnsErorrWhenTokenNotBearer() {
-    this.request.headers.authorization = Constants.TOKEN_3;
+    this.request.headers.authorization = constants.sessions.TOKEN_3;
 
     const error = await this.assertThat(
       authenticate(this.request, this.resource)
@@ -85,7 +85,7 @@ export class AuthenticateTest extends APITestCase {
   }
 
   async testReturnAnExpiredToken() {
-    this.request.headers.authorization = `Bearer ${Constants.TOKEN_2}`;
+    this.request.headers.authorization = `Bearer ${constants.sessions.TOKEN_2}`;
 
     const error = await this.assertThat(
       authenticate(this.request, this.resource)

@@ -20,7 +20,7 @@ export class CreateWatchHubTest extends APITestCase {
     const body = await this.simulatePost<WatchHubSchema>({
       path: '/watchHubs',
       statusCode: 201,
-      token: constants.TOKEN_3,
+      token: constants.sessions.TOKEN_3,
       payload: {
         name: 'Horroctober',
         description: 'A list of movies for your halloween marathon',
@@ -32,7 +32,7 @@ export class CreateWatchHubTest extends APITestCase {
     this.assertThat(body.name).isEqual('Horroctober');
     this.assertThat(body.description).isEqual('A list of movies for your halloween marathon');
     this.assertThat(body.privacy).isEqual(WatchHubPrivacy.PRIVATE);
-    this.assertThat(body.ownerId).isEqual('fb720643-1d12-4fca-8d2f-61a18d842d2c');
+    this.assertThat(body.ownerId).isEqual(constants.users.CEDRIC_ID);
     this.assertThat(body.createdAt).doesExist();
     this.assertThat(body.updatedAt).doesExist();
   }
@@ -55,7 +55,7 @@ export class CreateWatchHubTest extends APITestCase {
     const result = await this.simulatePost<APIError>({
       path: '/watchHubs',
       statusCode: 401,
-      token: constants.TOKEN_4,
+      token: constants.sessions.TOKEN_4,
       payload: {
         name: 'Horroctober',
         description: 'A list of movies for your halloween marathon',
@@ -70,7 +70,7 @@ export class CreateWatchHubTest extends APITestCase {
     const result = await this.simulatePost<APIError>({
       path: '/watchHubs',
       statusCode: 400,
-      token: constants.TOKEN_3,
+      token: constants.sessions.TOKEN_3,
       payload: {
         name: 'Horroctober',
         description: 'A list of movies for your halloween marathon',
@@ -89,7 +89,7 @@ export class CreateWatchHubTest extends APITestCase {
     const result = await this.simulatePost<APIError>({
       path: '/watchHubs',
       statusCode: 500,
-      token: constants.TOKEN_3,
+      token: constants.sessions.TOKEN_3,
       payload: {
         name: 'Horroctober',
         description: 'A list of movies for your halloween marathon',

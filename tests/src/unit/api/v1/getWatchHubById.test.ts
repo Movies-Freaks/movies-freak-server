@@ -24,7 +24,7 @@ export class GetWatchHubByIdTest extends APITestCase {
   async testGetWatchHubByItsId() {
     const result = await this.simulateGet<WatchHubSchema>({
       path: `/watchHubs/${this.watchHubId}`,
-      token: constants.TOKEN_3
+      token: constants.sessions.TOKEN_3
     });
 
     this.assertThat(result.id).isEqual(this.watchHubId);
@@ -45,7 +45,7 @@ export class GetWatchHubByIdTest extends APITestCase {
     const result = await this.simulateGet<APIError>({
       path: `/watchHubs/${this.watchHubId}`,
       statusCode: 401,
-      token: constants.TOKEN_4
+      token: constants.sessions.TOKEN_4
     });
 
     this.assertThat(result.code).isEqual('TOKEN_EXPIRED');
@@ -55,7 +55,7 @@ export class GetWatchHubByIdTest extends APITestCase {
     const result = await this.simulateGet<APIError>({
       path: `/watchHubs/${this.generateUUID()}`,
       statusCode: HTTPStatusCode.NOT_FOUND,
-      token: constants.TOKEN_3
+      token: constants.sessions.TOKEN_3
     });
 
     this.assertThat(result.code).isEqual('WATCH_HUB_NOT_FOUND');
@@ -69,7 +69,7 @@ export class GetWatchHubByIdTest extends APITestCase {
     const result = await this.simulateGet<APIError>({
       path: `/watchHubs/${this.watchHubId}`,
       statusCode: HTTPStatusCode.UNEXPECTED_ERROR,
-      token: constants.TOKEN_3
+      token: constants.sessions.TOKEN_3
     });
 
     this.assertThat(result.code).isEqual('UNEXPECTED_ERROR');

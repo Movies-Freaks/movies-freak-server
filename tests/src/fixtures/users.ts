@@ -1,8 +1,8 @@
-import Constants from './constants';
+import constants from './constants';
 
 const usersFixture = [
   {
-    id: Constants.USER_1,
+    id: constants.users.HERMIONE_ID,
     name: 'Hermione',
     username: 'smart_witch',
     firstLastName: 'Granger',
@@ -14,7 +14,7 @@ const usersFixture = [
     }
   },
   {
-    id: Constants.USER_2,
+    id: constants.users.ALBUS_ID,
     name: 'Albus Severus',
     username: 'albus',
     firstLastName: 'Potter',
@@ -27,7 +27,7 @@ const usersFixture = [
     }
   },
   {
-    id: Constants.USER_3,
+    id: constants.users.CEDRIC_ID,
     name: 'Cedric',
     username: 'cedric',
     firstLastName: 'Diggory',
@@ -39,7 +39,7 @@ const usersFixture = [
     }
   },
   {
-    id: Constants.USER_4,
+    id: constants.users.NEWTON_ID,
     name: 'Newton Artemis',
     username: 'newt',
     firstLastName: 'Fido',
@@ -52,13 +52,25 @@ const usersFixture = [
     }
   },
   {
-    id: Constants.USER_5,
+    id: constants.users.NARCISA_ID,
     name: 'Narcisa',
     username: 'narcisa',
     firstLastName: 'Black',
     secondLastName: 'Malfoy',
     email: 'black@hogwarts.wiz',
     birthdate: new Date(1955, 3, 25),
+    password: {
+      hash: '9cbf2780b18fd357c7a4a330d65f7519b690b11f7e03690b7f2a58f0ca2046896cd28007b04c4433191fecd087d5b1e01eaa6d8a0f3c0d9045268021c690a8f9',
+      salt: 'bb82afb326eab930'
+    }
+  },
+  {
+    id: constants.users.HARRY_ID,
+    name: 'Harry',
+    username: 'elegido',
+    firstLastName: 'Potter',
+    email: 'harry@hogwarts.wiz',
+    birthdate: new Date(1985, 7, 31),
     password: {
       hash: '9cbf2780b18fd357c7a4a330d65f7519b690b11f7e03690b7f2a58f0ca2046896cd28007b04c4433191fecd087d5b1e01eaa6d8a0f3c0d9045268021c690a8f9',
       salt: 'bb82afb326eab930'

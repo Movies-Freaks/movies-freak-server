@@ -1,7 +1,7 @@
 import DateUtils from 'jesusx21/dateUtils';
 import { set } from 'lodash';
 
-import Constants from 'tests/src/fixtures/constants';
+import constants from 'tests/src/fixtures/constants';
 import SQLTestCase from '../testCase';
 import { Resources } from 'tests/src/fixtures/type';
 
@@ -37,7 +37,7 @@ export class CreateSessionTest extends SessionsStoreTest {
 
     this.assertThat(sessionCreated).isInstanceOf(Session);
     this.assertThat(sessionCreated.id).doesExist();
-    this.assertThat(sessionCreated.userId).isEqual('fb720643-1d12-4fca-8d2f-61a18d842d2c');
+    this.assertThat(sessionCreated.userId).isEqual(constants.users.CEDRIC_ID);
     this.assertThat(sessionCreated.token).isEqual('62da8cc921eb3f81fd9979039b16bbca');
     this.assertThat(sessionCreated.isActive).isFalse();
     this.assertThat(sessionCreated.createdAt).isEqualDate(new Date());
@@ -73,7 +73,7 @@ export class CreateSessionTest extends SessionsStoreTest {
 
   private buildSession() {
     return new Session({
-      userId: Constants.USER_3,
+      userId: constants.users.CEDRIC_ID,
       token: '62da8cc921eb3f81fd9979039b16bbca',
       expiresAt: DateUtils.getDateNDaysFromNow(2),
       isActive: false
@@ -95,8 +95,8 @@ export class FindByIdTest extends SessionsStoreTest {
       .sessions
       .findById(this.sessionId);
 
-    this.assertThat(sessionFound.userId).isEqual('e42d57e4-ddb0-4a63-9d88-b452f4979abe');
-    this.assertThat(sessionFound.token).isEqual('9c7ae8b07eeb4d7bce7afb37444ed0ea');
+    this.assertThat(sessionFound.userId).isEqual(constants.users.ALBUS_ID);
+    this.assertThat(sessionFound.token).isEqual(constants.sessions.TOKEN_2);
     this.assertThat(sessionFound.isActive).isFalse();
   }
 
@@ -126,7 +126,7 @@ export class FindSessionByTokenTest extends SessionsStoreTest {
   async setUp() {
     await super.setUp();
 
-    this.token = Constants.TOKEN_5;
+    this.token = constants.sessions.TOKEN_5;
   }
 
   async testFindSessionByToken() {
@@ -134,7 +134,7 @@ export class FindSessionByTokenTest extends SessionsStoreTest {
       .sessions
       .findByToken(this.token);
 
-    this.assertThat(sessionFound.token).isEqual('0e127cd7f6e5ae88983265807bb3994a');
+    this.assertThat(sessionFound.token).isEqual(constants.sessions.TOKEN_5);
     this.assertThat(sessionFound.isActive).isTrue();
   }
 
@@ -162,16 +162,17 @@ export class FindLatestActiveByUserIdTest extends SessionsStoreTest {
   async testFindLatestActiveSessionByUserId() {
     const sessionFound = await this.database
       .sessions
-      .findLatestActiveByUserId(Constants.USER_1);
+      .findLatestActiveByUserId(constants.users.HERMIONE_ID);
 
-    this.assertThat(sessionFound.userId).isEqual('3e4252d5-fdca-4e00-906a-70407982699d');
+    this.assertThat(sessionFound.userId).isEqual(constants.users.HERMIONE_ID);
+    this.assertThat(sessionFound.token).isEqual(constants.sessions.TOKEN_1);
     this.assertThat(sessionFound.isActive).isTrue();
   }
 
   async testThrowsErrorWhenUserHasNotActiveSessions() {
     const session = await this.database
       .sessions
-      .findLatestActiveByUserId(Constants.USER_1);
+      .findLatestActiveByUserId(constants.users.HERMIONE_ID);
 
     session.deactivateToken();
     await this.database.sessions.update(session);
@@ -179,7 +180,7 @@ export class FindLatestActiveByUserIdTest extends SessionsStoreTest {
     await this.assertThat(
       this.database
         .sessions
-        .findLatestActiveByUserId(Constants.USER_1)
+        .findLatestActiveByUserId(constants.users.HERMIONE_ID)
     ).willBeRejectedWith(SessionNotFound);
   }
 
@@ -190,7 +191,7 @@ export class FindLatestActiveByUserIdTest extends SessionsStoreTest {
     await this.assertThat(
       this.database
         .sessions
-        .findLatestActiveByUserId(Constants.USER_1)
+        .findLatestActiveByUserId(constants.users.HERMIONE_ID)
     ).willBeRejectedWith(SQLDatabaseException);
   }
 }

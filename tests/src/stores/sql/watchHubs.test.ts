@@ -1,5 +1,6 @@
 import Serializer, { SerializerError } from 'jesusx21/serializer';
 
+import constants from 'tests/src/fixtures/constants';
 import SQLTestCase from '../testCase';
 import { Resources } from 'tests/src/fixtures/type';
 
@@ -40,7 +41,7 @@ export class CreateWatchHubTest extends WatchHubsStoreTest {
     this.assertThat(watchHubCreated.name).isEqual('Conjuring Universe');
     this.assertThat(watchHubCreated.description).isEqual('A timeline for the conjuring movies');
     this.assertThat(watchHubCreated.privacy).isEqual('public');
-    this.assertThat(watchHubCreated.ownerId).isEqual('e42d57e4-ddb0-4a63-9d88-b452f4979abe');
+    this.assertThat(watchHubCreated.ownerId).isEqual(constants.users.ALBUS_ID);
   }
 
   async testThrowErrorOnSerializationError() {

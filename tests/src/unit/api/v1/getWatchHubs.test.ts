@@ -23,7 +23,7 @@ export class GetWatchHubsTest extends APITestCase {
   async testGetWatchHubsWithoutSendingPagination() {
     const result = await this.simulateGet<WatchHubList>({
       path: '/watchHubs',
-      token: constants.TOKEN_3
+      token: constants.sessions.TOKEN_3
     });
 
     this.assertThat(result.items).hasLengthOf(5);
@@ -36,7 +36,7 @@ export class GetWatchHubsTest extends APITestCase {
     const result = await this.simulateGet<WatchHubList>({
       path: '/watchHubs',
       query: { perPage: 2 },
-      token: constants.TOKEN_3
+      token: constants.sessions.TOKEN_3
     });
 
     this.assertThat(result.items).hasLengthOf(2);
@@ -49,7 +49,7 @@ export class GetWatchHubsTest extends APITestCase {
     const result = await this.simulateGet<WatchHubList>({
       path: '/watchHubs',
       query: { page: 1 },
-      token: constants.TOKEN_3
+      token: constants.sessions.TOKEN_3
     });
 
     this.assertThat(result.items).hasLengthOf(5);
@@ -62,7 +62,7 @@ export class GetWatchHubsTest extends APITestCase {
     const result = await this.simulateGet<WatchHubList>({
       path: '/watchHubs',
       query: { page: 3, perPage: 2 },
-      token: constants.TOKEN_3
+      token: constants.sessions.TOKEN_3
     });
 
     this.assertThat(result.items).hasLengthOf(1);
@@ -75,7 +75,7 @@ export class GetWatchHubsTest extends APITestCase {
     const result = await this.simulateGet<WatchHubList>({
       path: '/watchHubs',
       query: { sort: 'name' },
-      token: constants.TOKEN_3
+      token: constants.sessions.TOKEN_3
     });
 
     this.assertThat(result.items[0].name).isEqual('A Very Christmas List');
@@ -89,7 +89,7 @@ export class GetWatchHubsTest extends APITestCase {
     const result = await this.simulateGet<WatchHubList>({
       path: '/watchHubs',
       query: { sort: '-name' },
-      token: constants.TOKEN_3
+      token: constants.sessions.TOKEN_3
     });
 
     this.assertThat(result.items[0].name).isEqual('Start Wars Timeline');
@@ -112,7 +112,7 @@ export class GetWatchHubsTest extends APITestCase {
     const result = await this.simulateGet<APIError>({
       path: '/watchHubs',
       statusCode: 401,
-      token: constants.TOKEN_4
+      token: constants.sessions.TOKEN_4
     });
 
     this.assertThat(result.code).isEqual('TOKEN_EXPIRED');
@@ -126,7 +126,7 @@ export class GetWatchHubsTest extends APITestCase {
     const result = await this.simulateGet<APIError>({
       path: '/watchHubs',
       statusCode: HTTPStatusCode.UNEXPECTED_ERROR,
-      token: constants.TOKEN_3
+      token: constants.sessions.TOKEN_3
     });
 
     this.assertThat(result.code).isEqual('UNEXPECTED_ERROR');

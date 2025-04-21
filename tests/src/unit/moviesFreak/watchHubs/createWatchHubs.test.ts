@@ -1,3 +1,4 @@
+import constants from 'tests/src/fixtures/constants';
 import TestCase from 'tests/src/testCase';
 
 import CreateWatchHub from 'moviesFreak/watchHubs/create';
@@ -37,7 +38,7 @@ export default class CreateWatchHubTest extends TestCase {
     this.assertThat(watchHub.id).doesExist();
     this.assertThat(watchHub.name).isEqual('Horroctober');
     this.assertThat(watchHub.privacy).isEqual(WatchHubPrivacy.SHARED);
-    this.assertThat(watchHub.ownerId).isEqual('5c54e81b-589a-4d29-96c4-1519ba407dc0');
+    this.assertThat(watchHub.ownerId).isEqual(constants.users.NEWTON_ID);
     this.assertThat(watchHub.description)
       .isEqual('A collection of horror movies for marathon october');
   }
