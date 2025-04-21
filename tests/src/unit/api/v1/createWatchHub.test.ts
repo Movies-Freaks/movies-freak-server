@@ -5,7 +5,7 @@ import constants from 'tests/src/fixtures/constants';
 import { Resources } from 'tests/src/fixtures/type';
 
 import CreateWatchHub from 'moviesFreak/watchHubs/create';
-import { WatchHubPrivacy } from 'moviesFreak/entities';
+import { WatchHubPrivacy } from 'moviesFreak/entities/types';
 import { WatchHubSchema } from 'database/schemas';
 
 export class CreateWatchHubTest extends APITestCase {

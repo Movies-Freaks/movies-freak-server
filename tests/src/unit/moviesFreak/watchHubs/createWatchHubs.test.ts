@@ -2,8 +2,9 @@ import TestCase from 'tests/src/testCase';
 
 import CreateWatchHub from 'moviesFreak/watchHubs/create';
 import { CouldNotCreateWatchHub } from 'moviesFreak/watchHubs/errors';
-import { User, WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
 import { Resources } from 'tests/src/fixtures/type';
+import { User, WatchHub } from 'moviesFreak/entities';
+import { WatchHubPrivacy } from 'moviesFreak/entities/types';
 
 export default class CreateWatchHubTest extends TestCase {
   createWatchHub: CreateWatchHub;

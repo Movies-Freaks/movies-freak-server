@@ -1,5 +1,5 @@
 import { UUID } from 'types';
-import { WatchHubPrivacy } from 'moviesFreak/entities/watchHub';
+import { WatchHubPrivacy } from 'moviesFreak/entities/types';
 
 type StoreSchema = {
   id?: UUID,

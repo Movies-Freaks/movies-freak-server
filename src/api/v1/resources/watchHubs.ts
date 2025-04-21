@@ -6,8 +6,9 @@ import WatchHubs from 'moviesFreak/watchHubs';
 import Pagination from 'api/pagination';
 import { Database } from 'database';
 import { Json } from 'types';
-import { User, WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
+import { User, WatchHub } from 'moviesFreak/entities';
 import { WatchHubList } from '../types';
+import { WatchHubPrivacy } from 'moviesFreak/entities/types';
 import { WatchHubSchema } from 'database/schemas';
 
 const VALID_PRIVACIES = Object.values(WatchHubPrivacy);

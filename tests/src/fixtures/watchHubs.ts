@@ -1,5 +1,5 @@
-import { WatchHubPrivacy } from 'moviesFreak/entities';
 import constants from './constants';
+import { WatchHubPrivacy } from 'moviesFreak/entities/types';
 
 const watchHubsFixture = [
   {

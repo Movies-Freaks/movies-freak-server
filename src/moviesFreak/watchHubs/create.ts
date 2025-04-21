@@ -1,7 +1,8 @@
 
 import { CouldNotCreateWatchHub } from './errors';
 import { Database } from 'database';
-import { User, WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
+import { User, WatchHub } from 'moviesFreak/entities';
+import { WatchHubPrivacy } from 'moviesFreak/entities/types';
 
 export default class CreateWatchHub {
   constructor(

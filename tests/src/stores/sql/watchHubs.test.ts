@@ -4,9 +4,10 @@ import SQLTestCase from '../testCase';
 import { Resources } from 'tests/src/fixtures/type';
 
 import { SQLDatabaseException } from 'database/stores/sql/errors';
-import { User, WatchHub, WatchHubPrivacy } from 'moviesFreak/entities';
+import { User, WatchHub } from 'moviesFreak/entities';
 import { UUID } from 'types';
 import { WatchHubNotFound } from 'database/stores/errors';
+import { WatchHubPrivacy } from 'moviesFreak/entities/types';
 
 class WatchHubsStoreTest extends SQLTestCase {
   users: User[];
