@@ -5,6 +5,7 @@ import moviesFixture from './movies';
 import sessionsFixture from './sessions';
 import usersFixture from './users';
 import watchHubsFixture from './watchHubs';
+import watchHubsCollaboratorsFixture from './watchHubsCollaborators';
 import { Resources } from './type';
 
 import { Database } from 'database';
@@ -13,14 +14,16 @@ import {
   Movie,
   Session,
   User,
-  WatchHub
+  WatchHub,
+  WatchHubsCollaborator
 } from 'moviesFreak/entities';
 
 const fixturesEntities = {
   movies: Movie,
   sessions: Session,
   users: User,
-  watchHubs: WatchHub
+  watchHubs: WatchHub,
+  watchHubsCollaborators: WatchHubsCollaborator
 };
 
 export default class Fixtures {
@@ -34,7 +37,8 @@ export default class Fixtures {
       movies: moviesFixture,
       sessions: sessionsFixture,
       users: usersFixture,
-      watchHubs: watchHubsFixture
+      watchHubs: watchHubsFixture,
+      watchHubsCollaborators: watchHubsCollaboratorsFixture
     };
   }
 

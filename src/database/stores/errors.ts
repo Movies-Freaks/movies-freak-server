@@ -13,6 +13,15 @@ export class InvalidData extends DatabaseError {
   }
 }
 
+export class CollaborationAlreadyExists extends InvalidData {
+  constructor(watchHubId: UUID, collaboratorId: UUID) {
+    super({
+      info: { watchHubId, collaboratorId },
+      message: 'Collaboration already exists.'
+    });
+  }
+}
+
 export class EmailAlreadyExists extends InvalidData {
   constructor(username: string) {
     super({ username });
@@ -50,3 +59,4 @@ export class MovieNotFound extends NotFound {}
 export class SessionNotFound extends NotFound {}
 export class UserNotFound extends NotFound {}
 export class WatchHubNotFound extends NotFound {}
+export class WatchHubsCollaboratorNotFound extends NotFound {}
