@@ -8,7 +8,7 @@ import { Resources } from './fixtures/type';
 
 import getDatabase, { Database } from 'database';
 import Entity from 'moviesFreak/entities/entity';
-import { Class, UUID } from 'types';
+import { Class, Json, UUID } from 'types';
 import { DatabaseDriver } from 'config/types';
 
 class SandboxNotInitialized extends Error {
@@ -56,7 +56,7 @@ export default class TestCase extends ClasspuccinoTestCase {
     this.database = undefined;
   }
 
-  mockClass(klass: Class, functionType = 'instance') {
+  mockClass(klass: Class | Json, functionType = 'instance') {
     if (!this.sandbox) {
       throw new SandboxNotInitialized();
     }

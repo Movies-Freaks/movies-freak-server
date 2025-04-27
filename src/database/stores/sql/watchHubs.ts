@@ -64,6 +64,25 @@ export default class SQLWatchHubsStore extends AbstractSQLStore<WatchHub> {
     }
   }
 
+  async update(watchHub: WatchHub): Promise<WatchHub> {
+    try {
+      await this.connection(SQLTables.WATCH_HUBS)
+        .returning('*')
+        .update({
+          name: watchHub.name,
+          description: watchHub.description,
+          privacy: watchHub.privacy,
+          owner_id: watchHub.ownerId,
+          updated_at: new Date()
+        })
+        .where({ id: watchHub.id });
+    } catch (error) {
+      throw new SQLDatabaseException(error);
+    }
+
+    return this.findById(watchHub.id);
+  }
+
   protected async find(query: Json): Promise<WatchHub[]> {
     let items: Json[];
 

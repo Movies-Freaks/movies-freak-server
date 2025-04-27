@@ -1,3 +1,5 @@
+import { set } from 'lodash';
+
 import Serializer, { SerializerError } from 'jesusx21/serializer';
 
 import constants from 'tests/src/fixtures/constants';
@@ -162,6 +164,58 @@ export class FindAll extends WatchHubsStoreTest {
       this.database
         .watchHubs
         .findAll(100, 0)
+    ).willBeRejectedWith(SQLDatabaseException);
+  }
+}
+
+export class UpdateWatchHubTest extends WatchHubsStoreTest {
+  protected watchHub: WatchHub;
+
+  async setUp() {
+    await super.setUp();
+
+    this.watchHub = await this.database
+      .watchHubs
+      .findById(constants.watchHubs.CHRISTMAS_ID);
+  }
+
+  async testUpdateWatchHub() {
+    this.assertThat(this.watchHub.name).isEqual('A Very Christmas List');
+    this.assertThat(this.watchHub.privacy).isEqual('shared');
+    this.assertThat(this.watchHub.description)
+      .isEqual('A list of movies you can watch on christmas eve.');
+
+    this.watchHub.name = 'Another Christmas Hub';
+    this.watchHub.description = 'Another list to watch on Christmas';
+    this.watchHub.privacy = WatchHubPrivacy.PRIVATE;
+
+    this.watchHub = await this.database
+      .watchHubs
+      .update(this.watchHub);
+
+    this.assertThat(this.watchHub.name).isEqual('Another Christmas Hub');
+    this.assertThat(this.watchHub.description).isEqual('Another list to watch on Christmas');
+    this.assertThat(this.watchHub.privacy).isEqual('private');
+  }
+
+  async testThrowsErrorWhenWatchHubIsNotFound() {
+    set(this.watchHub, 'id', this.generateUUID());
+
+    await this.assertThat(
+      this.database
+        .watchHubs
+        .update(this.watchHub)
+    ).willBeRejectedWith(WatchHubNotFound);
+  }
+
+  async testThrowsErrorOnUnexpectedError() {
+    this.stubFunction(this.database.watchHubs, 'connection')
+      .throws(new SerializerError());
+
+    await this.assertThat(
+      this.database
+        .watchHubs
+        .update(this.watchHub)
     ).willBeRejectedWith(SQLDatabaseException);
   }
 }

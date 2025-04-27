@@ -19,6 +19,7 @@ class MoviesFreakAppTest extends MoviesFreakApp {
 
 enum RequestVerb {
   POST = 'post',
+  PUT = 'put',
   GET = 'get'
 };
 
@@ -33,8 +34,17 @@ type PostRequestParams = RequestParams & {
   payload?: Json
 }
 
+type PutRequestParams = RequestParams & {
+  payload?: Json
+}
+
 type GetRequestParams = RequestParams & {
   query?: Json
+}
+
+type HTTPRequestParams = RequestParams & {
+  query?: Json,
+  payload?: Json
 }
 
 export default class APITestCase extends TestCase {
@@ -59,43 +69,17 @@ export default class APITestCase extends TestCase {
   }
 
   async simulatePost<T = Json>(params: PostRequestParams): Promise<T> {
-    const {
-      token,
-      payload = {},
-      statusCode = 201,
-      ...requestParams
-    } = params;
+    const { statusCode = 201 } = params;
 
-    let request = this.initRequest(RequestVerb.POST, requestParams)
-      .send(payload);
+    return this.simulateRequest(RequestVerb.POST, { ...params, statusCode});
+  }
 
-    if (!isNil(token)) {
-      request = request.set('Authorization', `Bearer ${token}`)
-    }
-
-    const { body } = await request.expect(statusCode);
-
-    return body;
+  async simulatePut<T = Json>(params: PutRequestParams): Promise<T> {
+    return this.simulateRequest(RequestVerb.PUT, params);
   }
 
   async simulateGet<T = Json>(params: GetRequestParams): Promise<T> {
-    const {
-      token,
-      query = {},
-      statusCode = 200,
-      ...requestParams
-    } = params;
-
-    let request = this.initRequest(RequestVerb.GET, requestParams)
-      .query(query);
-
-    if (!isNil(token)) {
-      request = request.set('Authorization', `Bearer ${token}`)
-    }
-
-    const { body } = await request.expect(statusCode);
-
-    return body;
+    return this.simulateRequest(RequestVerb.GET, params);
   }
 
   private buildTestApp(database: Database, imdb: IMDB) {
@@ -116,5 +100,27 @@ export default class APITestCase extends TestCase {
     }
 
     return requestBuilder;
+  }
+
+  private async simulateRequest(verb: RequestVerb, params: HTTPRequestParams) {
+    const {
+      token,
+      statusCode = 200,
+      ...requestParams
+    } = params;
+
+    let request = this.initRequest(verb, requestParams);
+
+    if (verb === RequestVerb.GET) request = request.query(params.query);
+    if (verb === RequestVerb.POST) request = request.send(params.payload);
+    if (verb === RequestVerb.PUT) request = request.send(params.payload);
+
+    if (!isNil(token)) {
+      request = request.set('Authorization', `Bearer ${token}`)
+    }
+
+    const { body } = await request.expect(statusCode);
+
+    return body;
   }
 }
